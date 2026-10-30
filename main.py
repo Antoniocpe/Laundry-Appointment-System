@@ -36,11 +36,10 @@ class MainWindow(QWidget):
 
         # ===== Sidebar buttons =====
         self.dashboard_btn = self.make_sidebar_button("1.png", "Dashboard", "dashboard_btn")
-        self.transaction_btn = self.make_sidebar_button("2.png", "Transaction", "transaction_btn")
+        self.transaction_btn = self.make_sidebar_button("2.png", "Transaction History", "transaction_btn")
         self.about_btn = self.make_sidebar_button("3.png", "About", "about_btn")
         self.exit_btn = self.make_sidebar_button("4.png", "Exit", "exit_btn")
 
-        # page buttons, in the same order as the pages in the stack
         self.sidebar_buttons = [self.dashboard_btn, self.transaction_btn, self.about_btn]
 
         for index, b in enumerate(self.sidebar_buttons):

@@ -1,3 +1,11 @@
+QWidget {
+    background-color: #ebf1fa;
+}
+
+QLabel {
+    color: #303030;
+}
+
 #addApptBtn {
     border: none;
     border-radius: 8px;
@@ -11,7 +19,7 @@
 
 #inQueue_text {
     font-weight: bold;
-    padding-left: 20px;
+    padding-left: 10px;
 }
 
 #total_text {
@@ -22,33 +30,33 @@
     background-color: #FFFFFF;
     border-radius: 15px;
     margin: 20px;
-    margin-top: 5px;
+    margin-top: 0px;
 }
 
 #customers_layout {
     background-color: #FFFFFF;
     border-radius: 15px;
     margin: 20px;
-    margin-top: 5px;
+    margin-top: 0px;
 }
 
 #customer_name {
     padding-right: 10px;
     background-color: transparent;
-    font-size: 18px;
+    font-size: 14px;
+    font-weight: bold;
 }
 
 #statusDot {
     padding-left: 50px;
 }
 
-#cardLine { color: #c8cfd8; }
-
-#details_layout {
+QFrame#details_layout {
     background-color: #FFFFFF;
 }
 
 #details_placeholder {
+    background-color: transparent;
     color: #939393;
     font-size: 15px;
 }

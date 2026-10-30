@@ -22,14 +22,17 @@ class StatusDot(QWidget):
         p.setBrush(self._color)
         p.drawEllipse(QRectF(self.rect()).adjusted(2, 2, -2, -2))
 
-
 class WasherWidget(QWidget):
     def __init__(self, ring="#c8cfd8", fill="#b8f2ff", ring_width=14):
         super().__init__()
         self._ring = QColor(ring)
         self._fill = QColor(fill)
+        self._default_fill = QColor(fill)
+        self._hover_fill = QColor("#e0f8ff")
         self._w = ring_width
+
         self.setMinimumSize(120, 120)
+        self.setMouseTracking(True)
 
     def sizeHint(self):
         return QSize(200, 200)
@@ -39,12 +42,11 @@ class WasherWidget(QWidget):
         p.setRenderHint(QPainter.RenderHint.Antialiasing)
         p.setPen(QPen(self._ring, self._w))
         p.setBrush(self._fill)
-        # largest centered square, inset by half the pen so the ring isn't clipped
+
         side = min(self.width(), self.height()) - self._w
         x = (self.width() - side) / 2
         y = (self.height() - side) / 2
         p.drawEllipse(QRectF(x, y, side, side))
-
 
 class CustomerCard(QWidget):
     def __init__(self, name):
@@ -55,10 +57,6 @@ class CustomerCard(QWidget):
         self.status.setObjectName("statusDot")
 
         self.name = QLabel(name)
-        font = self.name.font()
-        font.setBold(True)
-        font.setPointSize(14)
-        self.name.setFont(font)
         self.name.setAlignment(Qt.AlignmentFlag.AlignRight)
         self.name.setObjectName("customer_name")
 
@@ -69,8 +67,6 @@ class CustomerCard(QWidget):
         pal = self.line.palette()
         pal.setColor(QPalette.ColorRole.WindowText, QColor("#c8cfd8"))
         self.line.setPalette(pal)
-
-        self.line.setObjectName("cardLine")
 
         self.washer = WasherWidget()
 
@@ -85,7 +81,19 @@ class CustomerCard(QWidget):
         customer_layout.addWidget(self.washer, 2, 0, 1, 2)
         customer_layout.setColumnStretch(1, 1)
         customer_layout.setRowStretch(2, 1)
+
         self.setLayout(customer_layout)
+        self.setCursor(Qt.CursorShape.PointingHandCursor)
+
+    def enterEvent(self, event):
+        self.washer._fill = QColor("#e0f8ff")
+        self.washer.update()
+        super().enterEvent(event)
+
+    def leaveEvent(self, event):
+        self.washer._fill = QColor("#b8f2ff")
+        self.washer.update()
+        super().leaveEvent(event)
 
 
 
@@ -93,7 +101,7 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     Washer_qss = Path(__file__).with_name("Dashboard_style.qss")
     app.setStyleSheet(Washer_qss.read_text())
-    card = CustomerCard()
+    card = CustomerCard("")
     card.resize(270, 280)
     card.show()
     sys.exit(app.exec())

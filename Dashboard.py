@@ -60,19 +60,22 @@ class Dashboard(QWidget):
         middle_layout.addLayout(header_layout)
         middle_layout.addLayout(washers_info)
         middle_layout.addWidget(washers_scrollable_layout)
+        middle_layout.setContentsMargins(11, 11, 11, 11)
 
         # ----- details (right) -----
 
         details_container = QFrame()
+        details_container.setAttribute( Qt.WidgetAttribute.WA_StyledBackground, True)
+
         details_layout = QVBoxLayout(details_container)
         details_layout.addWidget(self.details_placeholder)
-        details_container.setObjectName("details_layout")
 
         # ----- page layout -----
         page_layout = QHBoxLayout(self)
-
         page_layout.addLayout(middle_layout, stretch=2)
         page_layout.addWidget(details_container, stretch=1)
+        page_layout.setContentsMargins(0, 0, 0, 0)
+
         # ----- object names (used by the QSS) -----
         self.header.setObjectName("header")
         self.add_appointment_btn.setObjectName("addApptBtn")
@@ -82,6 +85,8 @@ class Dashboard(QWidget):
         details_container.setObjectName("details_layout")
         self.details_placeholder.setObjectName("details_placeholder")
         washers_scrollable_layout.setObjectName("washers_scrollable_layout")
+
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
