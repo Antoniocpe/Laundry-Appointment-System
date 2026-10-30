@@ -6,7 +6,6 @@ from PyQt6.QtGui import QPainter, QPen, QColor, QPalette
 from pathlib import Path
 
 class StatusDot(QWidget):
-    """Small round status light (top-left). Change color with set_color()."""
     def __init__(self, color="#6fd36f", size=24):
         super().__init__()
         self._color = QColor(color)
@@ -25,7 +24,6 @@ class StatusDot(QWidget):
 
 
 class WasherWidget(QWidget):
-    """The big circle: thick gray ring + light cyan fill."""
     def __init__(self, ring="#c8cfd8", fill="#b8f2ff", ring_width=14):
         super().__init__()
         self._ring = QColor(ring)
@@ -88,6 +86,7 @@ class CustomerCard(QWidget):
         customer_layout.setColumnStretch(1, 1)
         customer_layout.setRowStretch(2, 1)
         self.setLayout(customer_layout)
+
 
 
 if __name__ == "__main__":

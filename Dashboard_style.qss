@@ -1,45 +1,4 @@
-
-
-QMainWindow {
-    background-color: #ebf1fa;
-}
-
-QLabel {
-    color: #303030;
-    font-family: "Segoe UI", Arial, sans-serif;
-    font-size: 15px;
-}
-
-#sidebar_layout {
-    background-color: #b6c9e0;
-    color: #fcfeff;
-}
-
-#dashboard_btn {
-    background-color: transparent;
-}
-
-#transaction_btn {
-    background-color: transparent;
-}
-
-#about_btn {
-    background-color: transparent;
-}
-
-#exit_btn {
-    background-color: transparent;
-}
-
-#header {
-    font-size: 29px;
-    font-weight: bold;
-    color: #3c5670;
-    text-transform: uppercase;
-    }
-
 #addApptBtn {
-
     border: none;
     border-radius: 8px;
     padding: 8px;
@@ -56,8 +15,14 @@ QLabel {
 }
 
 #total_text {
-
     padding-left: 20px;
+}
+
+#washers_scrollable_layout {
+    background-color: #FFFFFF;
+    border-radius: 15px;
+    margin: 20px;
+    margin-top: 5px;
 }
 
 #customers_layout {
