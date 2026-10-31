@@ -14,7 +14,6 @@ QLabel {
     background-color: #6491bf;
     text-align: center;
     color: #fcfeff;
-    margin-right: 20px;
 }
 
 #inQueue_text {
