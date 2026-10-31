@@ -7,9 +7,24 @@ from PyQt6.QtWidgets import (QApplication, QWidget, QLabel, QMainWindow,
 from PyQt6.QtGui import QIcon
 from pathlib import Path
 
-class successScreen(QMainWindow):
+# if u put this on the bottom, "if: __name__ = __main__" it works when running this in solo
+# python needs to find these files first or else addAppointment won't work.
+base_dir = Path(__file__).resolve().parent.parent
+
+if str(base_dir) not in sys.path:
+    sys.path.insert(0, str(base_dir))
+
+from widget.checkmark import Checkmark
+
+class successScreen(QWidget):
     def __init__(self):
         super().__init__()
+
+    # the qss cannot be accessed by addAppointment if its on the very bottom
+        successScreen_qss = base_dir / "styles" / "successScreen.qss"
+        if successScreen_qss.exists():
+            self.setStyleSheet(successScreen_qss.read_text())
+
         self.setFixedSize(800, 400)
 
         main_layout = QVBoxLayout()
@@ -20,7 +35,7 @@ class successScreen(QMainWindow):
         main_container = QWidget()
         main_container.setLayout(main_layout)
 
-        self.setCentralWidget(main_container)
+        self.setLayout(main_layout)
 
 #======= header ======== start
         header_layout = QHBoxLayout()
@@ -63,29 +78,12 @@ class successScreen(QMainWindow):
         self.header_text.setObjectName("header_text")
         self.thank_you_label.setObjectName("thank_you_label")
         
-
-
 #======= object names ======== end
 
 #======= signals and event calls ======== start
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-
-    base_dir = Path(__file__).resolve().parent.parent
-    successScreen_qss = base_dir / "styles" / "successScreen.qss"
-
-    if successScreen_qss.exists():
-        app.setStyleSheet(successScreen_qss.read_text())
-
-    # it cant find the widget folder since this .py file is in the widget folder
-    # can't use the .parent method above and won't work that way
-    if str(base_dir) not in sys.path:
-        sys.path.insert(0, str(base_dir))
-
-    # sys.path needs to find the file first before it must be loaded
-    from widget.checkmark import Checkmark
-
     window = successScreen()
     window.show()
     sys.exit(app.exec())
