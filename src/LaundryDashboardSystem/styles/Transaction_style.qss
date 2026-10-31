@@ -1,0 +1,37 @@
+QWidget {
+    background-color: #ebf1fa;
+}
+
+QLabel {
+    color: #303030;
+    font-size: 18px;
+    background-color: transparent;
+}
+
+#Receipt {
+    background-color: #ffffff; 
+    border-radius: 8px;
+    margin-bottom: 10px;
+    padding: 10px;
+    }
+
+QScrollArea { background: transparent; border: none; }
+
+#transaction_customer_name, #transaction_total_cost {
+    font-weight: bold;
+    font-size: 25px;
+}
+
+
+QPushButton[ShowHideBtn="show_btn"] {
+    background-color: transparent;
+    color: #b6c9e0;
+    font-weight: bold;
+    font-size: 15px;
+    text-align: left;
+}
+
+#more_total_fee {
+    font-weight: bold;
+    font-size: 20px;
+}
