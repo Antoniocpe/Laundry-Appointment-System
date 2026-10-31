@@ -2,12 +2,95 @@ QMainWindow {
     background-color: #FFFFFF;
 }
 
+QWidget {
+    color: #1e293b;
+}
+
 QLabel {
     font-size: 12px;
 }
 
+QLabel[tag="sectionLabel"]{
+    color: black;
+    font-size: 18px;
+    font-weight: bold;
+    padding-top: 2px;
+    padding-left: 7px;
+}
+
+QLabel[tag="widgetLabel"]{
+    color: black;
+    font-size: 15px;
+    padding: 2px;
+}
+
+QLineEdit {
+    background-color: white;
+    border: 1.3px solid #a8a8a8;
+    border-radius: 8px;
+    padding: 5px;
+}
+
+QLineEdit::hover{
+    border-color: #22588d;
+}
+
+QLineEdit::focus{
+    border: 1.5px solid #084a8b;;
+}
+
+QPushButton[tag="schedule_button"]{
+    border: 1.5px solid #a8a8a8;
+    border-radius: 23px;
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    margin-left: 10px;
+    margin-top: 5px;
+    
+    color: #a8a8a8;
+    font-size: 13px;
+    font-weight: bold;
+    text-align: center;
+    background-color: #FFFFFF;
+}
+
+QPushButton[tag="schedule_button"]:hover{
+    color: #22588d;
+    border: 1.5px solid #22588d;
+}
+
+QRadioButton{
+    color: #181818;
+    font-size: 14px;
+    spacing: 8px;
+    margin-left: 10px;
+    background: transparent;
+}
+
+QRadioButton::indicator { 
+    width: 12px;
+    height: 12px;
+    border-radius: 6px; 
+    border: 1.3px solid #a8a8a8;
+    background-color: #ffffff;
+}
+
+QRadioButton::indicator:checked {
+    border-radius: 6px; 
+    border: 1.4px solid #76b7f8;
+    background-color: #deedfb; 
+}
+
+QRadioButton::indicator:unchecked { 
+    background-color:transparent; 
+}
+
 #header_layout {
     background-color: #ebf1fa;
+    min-height: 75px;
+    max-height: 75px;
 }
 
 #back_btn {
@@ -24,8 +107,37 @@ QLabel {
     background-color: #22588d;
     font-weight: bold;
     font-size: 18px;
-    color: #FCFFF;
+    color: #FCFFFF;
     padding: 5px;
     border-radius: 11px;
     
+}
+
+#confirm_btn::hover {
+    background-color: #47739e;
+}
+
+#confirm_btn:pressed {
+    background-color: #085eb4;
+
+}
+
+#inputDetails_layout {
+    background-color: #FFFFFF;
+}
+
+#progress_layout{
+    background-color: #FFFFFF;
+}
+
+#services_layout{
+    background-color: #FFFFFF;
+}
+
+#specification_layout{
+    background-color: #FFFFFF;
+}
+
+#schedule_layout{
+    background-color: #FFFFFF;
 }

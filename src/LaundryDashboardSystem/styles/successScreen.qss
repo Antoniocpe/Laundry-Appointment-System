@@ -1,9 +1,10 @@
-QMainWindow {
+QWidget {
     background-color: #FFFFFF;
 }
 
 QPushButton{
     background-color: #3c5670;
+    color: #FFFFFF;
     font-weight: bold;
 }
 
