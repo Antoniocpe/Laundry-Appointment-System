@@ -56,7 +56,7 @@ class Receipt(QFrame):
         self.total_cost.setAlignment(Qt.AlignmentFlag.AlignRight)
 
         self.book_date = QLabel(f"Day of Booking: {book_day}")
-        self.service_date = QLabel(f"Day of Serive: {service_day}")
+        self.service_date = QLabel(f"Day of Service: {service_day}")
         self.received_date = QLabel(f"Date Received: {receive_day}")
 
         self.base_pixmap = None
