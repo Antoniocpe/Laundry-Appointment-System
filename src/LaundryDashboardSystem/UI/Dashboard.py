@@ -16,6 +16,7 @@ class Dashboard(QWidget):
         self.add_appointment_btn = QPushButton("+ Add Appointment")
         self.add_appointment_btn.setCursor(Qt.CursorShape.PointingHandCursor)
         self.add_appointment_btn.setFixedSize(200, 40)
+        #self.add_appointment_btn.clicked.connect()
 
         self.inQueue_text = QLabel("Washes in Queue")
         self.total_text = QLabel("Total: 0 / 0")
