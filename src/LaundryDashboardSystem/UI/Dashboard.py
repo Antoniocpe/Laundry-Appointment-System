@@ -60,7 +60,7 @@ class Dashboard(QWidget):
         middle_layout.addLayout(header_layout)
         middle_layout.addLayout(washers_info)
         middle_layout.addWidget(washers_scrollable_layout)
-        middle_layout.setContentsMargins(11, 11, 11, 11)
+        middle_layout.setContentsMargins(9, 9, 9, 9)
 
         # ----- details (right) -----
 
