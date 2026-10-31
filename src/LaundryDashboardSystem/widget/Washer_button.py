@@ -99,8 +99,12 @@ class CustomerCard(QWidget):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    Washer_qss = Path(__file__).with_name("Dashboard_style.qss")
-    app.setStyleSheet(Washer_qss.read_text())
+    base_dir = Path(__file__).resolve().parent
+    dashboard_qss = base_dir / "styles" / "Dashboard_style.qss"
+
+    if dashboard_qss.exists():
+        app.setStyleSheet(dashboard_qss.read_text())
+
     card = CustomerCard("")
     card.resize(270, 280)
     card.show()
