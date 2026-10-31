@@ -35,3 +35,60 @@ QPushButton[SidebarBtnClass="sidebar-buttons"]:checked {
     color: #3c5670;
     text-transform: uppercase;
 }
+QFrame#about_card {
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+    border-radius: 8px;
+}
+
+QLabel#app_title {
+    font-size: 21px;
+    font-weight: bold;
+    color: #263b32;
+}
+
+QLabel#section_title {
+    font-size: 17px;
+    font-weight: bold;
+    color: #263b32;
+}
+
+QLabel#description {
+    font-size: 13px;
+    color: #555555;
+}
+
+QLabel#feature_text {
+    font-size: 13px;
+    color: #444444;
+}
+
+QFrame#member_card {
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+    border-radius: 8px;
+}
+
+QLabel#member_picture {
+    background-color: #eeeeee;
+    border: 1px dashed #aaaaaa;
+    border-radius: 4px;
+    color: #888888;
+    font-size: 11px;
+}
+
+QLabel#member_name {
+    font-size: 13px;
+    font-weight: bold;
+    color: #263b32;
+}
+
+QLabel#member_role {
+    font-size: 11px;
+    color: #777777;
+}
+
+QLabel#footer_text {
+    font-size: 11px;
+    color: #888888;
+}
