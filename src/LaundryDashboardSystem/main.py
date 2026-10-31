@@ -115,6 +115,8 @@ if __name__ == "__main__":
     # Dashboard_style.qss is inside the styles folder
     dashboard_qss = base_dir / "styles" / "Dashboard_style.qss"
 
+    transaction_qss = base_dir / "styles" / "Transaction_style.qss"
+
     # 3. Read and apply the stylesheets safely
     style_sheets = []
 
@@ -127,6 +129,12 @@ if __name__ == "__main__":
         style_sheets.append(dashboard_qss.read_text())
     else:
         print(f"Warning: Could not find dashboard style at {dashboard_qss}")
+
+    if dashboard_qss.exists():
+        style_sheets.append(transaction_qss.read_text())
+    else:
+        print(f"Warning: Could not find dashboard style at {transaction_qss}")
+
 
     # Apply the combined styles to the app
     app.setStyleSheet("\n".join(style_sheets))
