@@ -19,7 +19,11 @@ QPushButton[SidebarBtnClass="sidebar-buttons"] {
     border-bottom: 3px solid transparent;
 }
 
-QPushButton[SidebarBtnClass="sidebar-buttons"]:hover,
+QPushButton[SidebarBtnClass="sidebar-buttons"]:hover{
+    background-color: transparent;
+    border-bottom: 3px solid #d3e5ef;
+}
+
 QPushButton[SidebarBtnClass="sidebar-buttons"]:checked {
     background-color: transparent;
     border-bottom: 3px solid #fcfeff;

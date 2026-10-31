@@ -4,7 +4,7 @@ from pathlib import Path
 from PyQt6.QtWidgets import (QApplication, QWidget, QLabel, QGridLayout, QPushButton,
                              QVBoxLayout, QScrollArea, QHBoxLayout, QFrame)
 
-from Washer_button import CustomerCard
+from widget.Washer_button import CustomerCard
 
 
 class Dashboard(QWidget):
@@ -90,8 +90,13 @@ class Dashboard(QWidget):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    qss_file = Path(__file__).with_name("Dashboard_style.qss")
-    app.setStyleSheet(qss_file.read_text())
+
+    base_dir = Path(__file__).resolve().parent.parent
+    dashboard_qss = base_dir / "styles" / "Dashboard_style.qss"
+
+    if dashboard_qss.exists():
+        app.setStyleSheet(dashboard_qss.read_text())
+
     window = Dashboard()
     window.show()
     sys.exit(app.exec())

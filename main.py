@@ -7,9 +7,9 @@ from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import (QApplication, QWidget, QPushButton, QVBoxLayout,
                              QHBoxLayout, QFrame, QStackedWidget)
 
-from Dashboard import Dashboard
-from Transaction import Transaction
-from About import About
+from UI.Dashboard import Dashboard
+from UI.Transaction import Transaction
+from UI.About import About
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -70,12 +70,25 @@ class MainWindow(QWidget):
     def make_sidebar_button(self, icon_file, tooltip, object_name):
         btn = QPushButton()
         btn.setCursor(Qt.CursorShape.PointingHandCursor)
-        btn.setIcon(QIcon(os.path.join(BASE_DIR, "Btn icons", icon_file)))
+
+        current_file_path = Path(__file__).resolve()
+        root_dir = current_file_path.parent
+        while root_dir.parent != root_dir and root_dir.name != "LaundryDashboardSystem":
+            root_dir = root_dir.parent
+
+        assets_dir = root_dir / "assets" / "Btn icons"
+        icon_path = assets_dir / icon_file
+
+        # 3. Apply icon safely if found
+        if icon_path.exists():
+            btn.setIcon(QIcon(str(icon_path)))
+
         btn.setIconSize(QSize(60, 60))
         btn.setToolTip(tooltip)
         btn.setObjectName(object_name)
         self.set_style_property(btn, "SidebarBtnClass", "sidebar-buttons")
         return btn
+
 
     def set_style_property(self, widget, name, value):
         widget.setProperty(name, value)
@@ -91,12 +104,33 @@ class MainWindow(QWidget):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    main_qss = Path(__file__).with_name("main_style.qss")
-    dashboard_qss = Path(__file__).with_name("Dashboard_style.qss")
 
-    app.setStyleSheet(
-        main_qss.read_text() + "\n" + dashboard_qss.read_text()
-    )
+    # 1. Establish the directory where main.py resides
+    base_dir = Path(__file__).resolve().parent
+
+    # 2. Point directly to your styles folder
+    # main_style.qss is right next to main.py
+    main_qss = base_dir / "main_style.qss"
+
+    # Dashboard_style.qss is inside the styles folder
+    dashboard_qss = base_dir / "styles" / "Dashboard_style.qss"
+
+    # 3. Read and apply the stylesheets safely
+    style_sheets = []
+
+    if main_qss.exists():
+        style_sheets.append(main_qss.read_text())
+    else:
+        print(f"Warning: Could not find main style at {main_qss}")
+
+    if dashboard_qss.exists():
+        style_sheets.append(dashboard_qss.read_text())
+    else:
+        print(f"Warning: Could not find dashboard style at {dashboard_qss}")
+
+    # Apply the combined styles to the app
+    app.setStyleSheet("\n".join(style_sheets))
+
 
     window = MainWindow()
     window.show()
