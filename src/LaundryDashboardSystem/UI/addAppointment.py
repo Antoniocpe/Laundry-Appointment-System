@@ -2,7 +2,7 @@ import sys, os
 from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtWidgets import (QApplication, QWidget, QLabel, QMainWindow,
                              QGridLayout, QPushButton, QVBoxLayout,
-                             QHBoxLayout, QProgressBar, QLineEdit, QRadioButton)
+                             QHBoxLayout, QStackedWidget, QLineEdit, QRadioButton)
 
 from PyQt6.QtGui import QIcon
 from pathlib import Path
@@ -12,6 +12,8 @@ class addAppointment(QMainWindow):
         super().__init__()
         self.setWindowTitle("Laundry Dashboard System")
         self.setFixedSize(800, 625)
+
+        self.form_count = 0
 
         main_layout = QVBoxLayout()
         main_layout.setContentsMargins(0,0,0,0)
@@ -48,6 +50,7 @@ class addAppointment(QMainWindow):
 
 #======= header ======== end
 
+
 #======= progress ======== start
         progress_layout = QHBoxLayout()
         progress_container = QWidget()
@@ -64,6 +67,10 @@ class addAppointment(QMainWindow):
         
         inputDetails_container = QWidget()
         inputDetails_container.setLayout(inputDetails_layout)
+
+        # this qstackedwidget basically changes the layout that will be used per click of the confirm button
+        self.stepbystep_forms = QStackedWidget()
+        self.stepbystep_forms.addWidget(inputDetails_container)
 
 #======= personal details ======== start
 
@@ -244,7 +251,7 @@ class addAppointment(QMainWindow):
 
         main_layout.addWidget(header_container, stretch=0)
         main_layout.addWidget(progress_container, stretch=0)
-        main_layout.addWidget(inputDetails_container, stretch=0)
+        main_layout.addWidget(self.stepbystep_forms, stretch=0)
 
         inputDetails_layout.addWidget(personalDetails_container, stretch=0)
         inputDetails_layout.addWidget(services_container, stretch=0)
@@ -253,6 +260,17 @@ class addAppointment(QMainWindow):
 
 
 #======= input details ======== end
+
+#======= success screen ======== start
+
+        success_layout = QHBoxLayout()  
+        success_container = QWidget()
+        success_container.setLayout(success_layout)
+
+        self.success_container = successScreen()
+        self.stepbystep_forms.addWidget(self.success_container)    
+
+#======= success screen ======== end
 
 #======= object names ======== start
 
@@ -295,6 +313,8 @@ class addAppointment(QMainWindow):
 
     def next_step(self):
         self.progress_bar.confirm_step()
+        self.form_count +=1
+        self.stepbystep_forms.setCurrentIndex(self.form_count)  
 
 #======= signals and event calls ======== end
 
@@ -314,6 +334,8 @@ if __name__ == "__main__":
 
     # sys.path needs to find the file first before it must be loaded
     from widget.Progress_bar import ProgressBar
+    from successScreen import successScreen
+
 
     window = addAppointment()
     window.show()
