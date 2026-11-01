@@ -1,25 +1,25 @@
-QWidget {
+#sucessScreen_qss QWidget {
     background-color: #FFFFFF;
 }
 
-QPushButton{
+#sucessScreen_qss QPushButton{
     background-color: #3c5670;
     color: #FFFFFF;
     font-weight: bold;
 }
 
-#header_text {
+#sucessScreen_qss #header_text {
     color: #3c5670;
     font-size: 29px;
     font-weight: bold;
 }
 
-#thank_you_label{
+#sucessScreen_qss #thank_you_label{
     color: black;
     font-size: 13px;
     margin-top: 7px;
 }
 
-#success_container{
+#sucessScreen_qss #success_container{
         background-color: #ffffff;
 }

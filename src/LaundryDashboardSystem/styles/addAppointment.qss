@@ -1,16 +1,18 @@
-QMainWindow {
+#addappointment_qss {
     background-color: #FFFFFF;
 }
 
-QWidget {
+#addappointment_qss QWidget {
     color: #1e293b;
+    background-color: #FFFFFF;
 }
 
-QLabel {
+#addappointment_qss QLabel {
     font-size: 12px;
+    background-color: #FFFFFF;
 }
 
-QLabel[tag="sectionLabel"]{
+#addappointment_qss QLabel[tag="sectionLabel"]{
     color: black;
     font-size: 18px;
     font-weight: bold;
@@ -18,28 +20,28 @@ QLabel[tag="sectionLabel"]{
     padding-left: 7px;
 }
 
-QLabel[tag="widgetLabel"]{
+#addappointment_qss QLabel[tag="widgetLabel"]{
     color: black;
     font-size: 15px;
     padding: 2px;
 }
 
-QLineEdit {
+#addappointment_qss QLineEdit {
     background-color: white;
     border: 1.3px solid #a8a8a8;
     border-radius: 8px;
     padding: 5px;
 }
 
-QLineEdit::hover{
+#addappointment_qss QLineEdit::hover{
     border-color: #22588d;
 }
 
-QLineEdit::focus{
+#addappointment_qss QLineEdit::focus{
     border: 1.5px solid #084a8b;;
 }
 
-QPushButton[tag="schedule_button"]{
+#addappointment_qss QPushButton[tag="schedule_button"]{
     border: 1.5px solid #a8a8a8;
     border-radius: 23px;
     padding-left: 40px;
@@ -56,12 +58,12 @@ QPushButton[tag="schedule_button"]{
     background-color: #FFFFFF;
 }
 
-QPushButton[tag="schedule_button"]:hover{
+#addappointment_qss QPushButton[tag="schedule_button"]:hover{
     color: #22588d;
     border: 1.5px solid #22588d;
 }
 
-QRadioButton{
+#addappointment_qss QRadioButton{
     color: #181818;
     font-size: 14px;
     spacing: 8px;
@@ -69,7 +71,7 @@ QRadioButton{
     background: transparent;
 }
 
-QRadioButton::indicator { 
+#addappointment_qss QRadioButton::indicator { 
     width: 12px;
     height: 12px;
     border-radius: 6px; 
@@ -77,33 +79,34 @@ QRadioButton::indicator {
     background-color: #ffffff;
 }
 
-QRadioButton::indicator:checked {
+#addappointment_qss QRadioButton::indicator:checked {
     border-radius: 6px; 
     border: 1.4px solid #76b7f8;
     background-color: #deedfb; 
 }
 
-QRadioButton::indicator:unchecked { 
+#addappointment_qss QRadioButton::indicator:unchecked { 
     background-color:transparent; 
 }
 
-#header_layout {
+#addappointment_qss #header_layout {
     background-color: #ebf1fa;
     min-height: 75px;
     max-height: 75px;
 }
 
-#back_btn {
+#addappointment_qss #back_btn {
     background-color: transparent;
 }
 
-#header_text {
+#addappointment_qss #header_text {
+    background-color: #ebf1fa;
     color: #3c5670;
     font-size: 29px;
     font-weight: bold;
 }
 
-#confirm_btn {
+#addappointment_qss #confirm_btn {
     background-color: #22588d;
     font-weight: bold;
     font-size: 18px;
@@ -113,31 +116,31 @@ QRadioButton::indicator:unchecked {
     
 }
 
-#confirm_btn::hover {
+#addappointment_qss #confirm_btn::hover {
     background-color: #47739e;
 }
 
-#confirm_btn:pressed {
+#addappointment_qss #confirm_btn:pressed {
     background-color: #085eb4;
 
 }
 
-#inputDetails_layout {
+#addappointment_qss #inputDetails_layout {
     background-color: #FFFFFF;
 }
 
-#progress_layout{
+#addappointment_qss #progress_layout{
     background-color: #FFFFFF;
 }
 
-#services_layout{
+#addappointment_qss #services_layout{
     background-color: #FFFFFF;
 }
 
-#specification_layout{
+#addappointment_qss #specification_layout{
     background-color: #FFFFFF;
 }
 
-#schedule_layout{
+#addappointment_qss #schedule_layout{
     background-color: #FFFFFF;
 }

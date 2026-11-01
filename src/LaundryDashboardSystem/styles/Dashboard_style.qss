@@ -2,7 +2,7 @@ QWidget {
     background-color: #ebf1fa;
 }
 
-QLabel {
+ QLabel {
     color: #303030;
 }
 
@@ -14,6 +14,7 @@ QLabel {
     background-color: #6491bf;
     text-align: center;
     color: #fcfeff;
+    margin-right: 20px;
 }
 
 #inQueue_text {

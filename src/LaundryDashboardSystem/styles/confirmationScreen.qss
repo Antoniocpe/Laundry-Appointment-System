@@ -1,0 +1,29 @@
+#confirmation_qss QWidget {
+    background-color: #FFFFFF;
+}
+
+#confirmation_qss #header_text {
+    color: #303030;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+#confirmation_qss QLabel[tag="widgetLabel"]{
+    color: black;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 2px;
+}
+
+#confirmation_qss QLabel[tag="placeholderLabel"]{
+    color: black;
+    font-size: 15px;
+    font-weight: bold;
+    padding: 2px;
+}
+
+#confirmation_qss #main_container{
+    border: 1.5px solid #a8a8a8; 
+    border-radius: 23px;
+}
+
