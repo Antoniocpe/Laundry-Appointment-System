@@ -7,7 +7,7 @@ class Checkmark(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setFixedSize(250, 260) 
+        self.setFixedSize(245, 245) 
  
     def paintEvent(self, event):
         painter = QPainter(self)
@@ -18,7 +18,7 @@ class Checkmark(QWidget):
         #painter.setBrush(QBrush(QColor("#6491bf"), Qt.BrushStyle.SolidPattern))
         painter.setBrush(QBrush(QColor("#b6c9e0"), Qt.BrushStyle.SolidPattern))
 
-        rect = QRect(10, 10, 230, 230)
+        rect = QRect(8, 10, 230, 230)
         painter.drawEllipse(rect)
         painter.setFont(font)
         painter.setPen(Qt.GlobalColor.white)
@@ -27,7 +27,7 @@ class Checkmark(QWidget):
         #painter.setBrush(QBrush(QColor("#a8a8a8"), Qt.BrushStyle.SolidPattern))
         painter.setBrush(QBrush(QColor("#6491bf"), Qt.BrushStyle.SolidPattern))
 
-        rect = QRect(35, 35, 180, 180)
+        rect = QRect(33, 35, 180, 180)
         painter.drawEllipse(rect)
         painter.setFont(font)
         painter.setPen(Qt.GlobalColor.white)

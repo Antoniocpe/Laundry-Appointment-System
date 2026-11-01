@@ -37,49 +37,49 @@ class ProgressBar(QWidget):
         #painter.setBrush(QBrush(QColor("#6491bf"), Qt.BrushStyle.SolidPattern))
         painter.setBrush(QBrush(self.circle_color1, Qt.BrushStyle.SolidPattern))
 
-        rect = QRect(120,5,50,50)
+        rect = QRect(130,5,50,50)
         painter.drawEllipse(rect)
         painter.setFont(font)
         painter.setPen(Qt.GlobalColor.white)
         painter.drawText(rect, Qt.AlignmentFlag.AlignCenter, "1")
 
-        text = QRect(70,40,150,50)
+        text = QRect(80,40,150,50)
         painter.setPen(Qt.GlobalColor.black)
         painter.setFont(font2)
         painter.drawText(text, Qt.AlignmentFlag.AlignCenter, "Booking Details")
 
         painter.setPen(QPen(self.circle_color2, 2, Qt.PenStyle.SolidLine))
-        painter.drawLine(180, 30, 350, 30)
+        painter.drawLine(190, 30, 350, 30)
 
         painter.setPen(QPen(self.circle_color2, 2, Qt.PenStyle.SolidLine))
         #painter.setBrush(QBrush(QColor("#a8a8a8"), Qt.BrushStyle.SolidPattern))
         painter.setBrush(QBrush(self.circle_color2, Qt.BrushStyle.SolidPattern))
         
-        rect = QRect(360,5,50,50)
+        rect = QRect(370,5,50,50)
         painter.drawEllipse(rect)
         painter.setFont(font)
         painter.setPen(Qt.GlobalColor.white)
         painter.drawText(rect, Qt.AlignmentFlag.AlignCenter, "2")
 
-        text = QRect(310,40,150,50)
+        text = QRect(320,40,150,50)
         painter.setPen(Qt.GlobalColor.black)
         painter.setFont(font2)
         painter.drawText(text, Qt.AlignmentFlag.AlignCenter, "Confirmation")
 
         painter.setPen(QPen(self.circle_color3, 2, Qt.PenStyle.SolidLine))
-        painter.drawLine(420, 30, 590, 30)
+        painter.drawLine(430, 30, 590, 30)
 
         painter.setPen(QPen(self.circle_color3, 2, Qt.PenStyle.SolidLine))
         #painter.setBrush(QBrush(QColor("#a8a8a8"), Qt.BrushStyle.SolidPattern))
         painter.setBrush(QBrush(self.circle_color3, Qt.BrushStyle.SolidPattern))
 
-        rect = QRect(600,5,50,50)
+        rect = QRect(610,5,50,50)
         painter.drawEllipse(rect)
         painter.setFont(font)
         painter.setPen(Qt.GlobalColor.white)
         painter.drawText(rect, Qt.AlignmentFlag.AlignCenter, "3")
 
-        text = QRect(550,40,150,50)
+        text = QRect(560,40,150,50)
         painter.setPen(Qt.GlobalColor.black)
         painter.setFont(font2)
         painter.drawText(text, Qt.AlignmentFlag.AlignCenter, "Success")
