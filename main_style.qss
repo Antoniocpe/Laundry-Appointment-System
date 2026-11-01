@@ -1,0 +1,66 @@
+#mainWindow {
+    background-color: #ebf1fa;
+}
+
+QLabel {
+    color: #303030;
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 15px;
+}
+
+#sidebar_layout {
+    background-color: #b5cae2;
+    color: #fcfeff;
+}
+
+QPushButton[SidebarBtnClass="sidebar-buttons"] {
+    background-color: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    margin: 0px 6px;
+    padding-bottom: 4px;
+}
+
+QPushButton[SidebarBtnClass="sidebar-buttons"]:hover {
+    background-color: transparent;
+    border-bottom: 3px solid #d3e5ef;
+}
+
+QPushButton[SidebarBtnClass="sidebar-buttons"]:checked {
+    background-color: transparent;
+    border-bottom: 3px solid #ffffff;
+}
+
+#header {
+    font-size: 22px;
+    font-weight: 800;
+    color: #2c4d70;
+    text-transform: uppercase;
+}
+
+/* About Page Cards */
+QFrame#about_card {
+    background-color: #ffffff;
+    border-radius: 16px;
+    border: none;
+}
+
+QFrame#member_card {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+}
+
+QLabel#member_picture {
+    background-color: #eef4fb;
+    border: 1px dashed #b5cae2;
+    border-radius: 12px;
+    color: #5c8bb7;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+QLabel#member_picture:hover {
+    background-color: #e2edfb;
+    border: 1px dashed #4a7aa7;
+}
