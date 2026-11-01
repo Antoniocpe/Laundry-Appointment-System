@@ -5,18 +5,20 @@ from PyQt6.QtWidgets import (QApplication, QWidget, QLabel, QGridLayout, QPushBu
                              QVBoxLayout, QScrollArea, QHBoxLayout, QFrame)
 
 from widget.Washer_button import CustomerCard
-
+from UI.addAppointment import addAppointment
 
 class Dashboard(QWidget):
     def __init__(self):
         super().__init__()
+
+        self.setObjectName("Dashboard_style")
 
         # ----- widgets -----
         self.header = QLabel("Dashboard")
         self.add_appointment_btn = QPushButton("+ Add Appointment")
         self.add_appointment_btn.setCursor(Qt.CursorShape.PointingHandCursor)
         self.add_appointment_btn.setFixedSize(200, 40)
-        #self.add_appointment_btn.clicked.connect()
+        self.add_appointment_btn.clicked.connect(self.open_appointment_window)
 
         self.inQueue_text = QLabel("Washes in Queue")
         self.total_text = QLabel("Total: 0 / 0")
@@ -61,7 +63,7 @@ class Dashboard(QWidget):
         middle_layout.addLayout(header_layout)
         middle_layout.addLayout(washers_info)
         middle_layout.addWidget(washers_scrollable_layout)
-        middle_layout.setContentsMargins(9, 9, 9, 9)
+        middle_layout.setContentsMargins(11, 11, 11, 11)
 
         # ----- details (right) -----
 
@@ -86,6 +88,15 @@ class Dashboard(QWidget):
         details_container.setObjectName("details_layout")
         self.details_placeholder.setObjectName("details_placeholder")
         washers_scrollable_layout.setObjectName("washers_scrollable_layout")
+
+    def open_appointment_window(self):
+        main_window = self.window()
+
+        self.appointment_window = addAppointment(main_window=main_window)
+        self.appointment_window.show()
+
+        if main_window:
+            main_window.close()
 
 
 

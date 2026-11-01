@@ -17,19 +17,22 @@ if str(base_dir) not in sys.path:
 from widget.checkmark import Checkmark
 
 class successScreen(QWidget):
-    def __init__(self):
+    def __init__(self, main_window=None):
         super().__init__()
-
+        
     # the qss cannot be accessed by addAppointment if its on the very bottom
         successScreen_qss = base_dir / "styles" / "successScreen.qss"
         if successScreen_qss.exists():
             self.setStyleSheet(successScreen_qss.read_text())
 
         self.setFixedSize(800, 400)
+        self.setObjectName("sucessScreen_qss")
 
-        main_layout = QVBoxLayout()
-        main_layout.setContentsMargins(0, 5, 0, 15)
-        main_layout.setSpacing(0)
+        self.main_window = main_window
+
+        main_layout = QVBoxLayout(self)
+        main_layout.setContentsMargins(0, 0, 0, 0)
+        main_layout.setSpacing(10)
         main_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         main_container = QWidget()
@@ -39,6 +42,7 @@ class successScreen(QWidget):
 
 #======= header ======== start
         header_layout = QHBoxLayout()
+        header_layout.setContentsMargins(0,0,0,0)
         header_container = QWidget()
         header_container.setLayout(header_layout)
 
@@ -52,14 +56,17 @@ class successScreen(QWidget):
 
         success_layout = QGridLayout()
         success_layout.setContentsMargins(0, 0, 0, 0)
-        success_layout.setSpacing(0)
+        success_layout.setSpacing(2)
 
         success_container = QWidget()
         success_container.setLayout(success_layout)
+        
  
         self.checkmark = Checkmark()
         self.prcd_dashboard_btn = QPushButton("Proceed to Dashboard")
         self.prcd_dashboard_btn.setFixedSize(220, 35)
+        self.prcd_dashboard_btn.setContentsMargins(0, 10, 0, 0)
+        self.prcd_dashboard_btn.clicked.connect(self.close_appointment_window)
         self.thank_you_label = QLabel("Thank you for trusting us!")
 
         success_layout.addWidget(self.checkmark, 0, 0, alignment=Qt.AlignmentFlag.AlignCenter)
@@ -80,7 +87,14 @@ class successScreen(QWidget):
         
 #======= object names ======== end
 
-#======= signals and event calls ======== start
+    def close_appointment_window(self):
+        if self.main_window:
+            self.main_window.show()
+            
+         # Close the parent top-level window (addAppointment)
+        top_window = self.window()
+        if top_window:
+             top_window.close()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

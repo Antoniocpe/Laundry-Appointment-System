@@ -7,12 +7,32 @@ from PyQt6.QtWidgets import (QApplication, QWidget, QLabel, QMainWindow,
 from PyQt6.QtGui import QIcon
 from pathlib import Path
 
+# it cant find the widget folder since this .py file is in the widget folder
+# can't use the .parent method above and won't work that way
+base_dir = Path(__file__).resolve().parent.parent
+if str(base_dir) not in sys.path:
+        sys.path.insert(0, str(base_dir))
+
+# sys.path needs to find the file first before it must be loaded
+from widget.Progress_bar import ProgressBar
+from UI.successScreen import successScreen
+from UI.confirmationScreen import Confirmation
+
 class addAppointment(QMainWindow):
-    def __init__(self):
+    def __init__(self, main_window=None):
         super().__init__()
+
+        self.main_window = main_window
+
+        # the qss cannot be accessed by addAppointment if its on the very bottom
+        addappointment_qss = base_dir / "styles" / "addAppointment.qss"
+        if addappointment_qss.exists():
+                self.setStyleSheet(addappointment_qss.read_text())   
+
         self.setWindowTitle("Laundry Dashboard System")
         self.setFixedSize(800, 625)
-
+        self.setObjectName("addappointment_qss")
+        
         self.form_count = 0
 
         main_layout = QVBoxLayout()
@@ -31,12 +51,13 @@ class addAppointment(QMainWindow):
         header_container.setLayout(header_layout)
 
         self.back_btn = QPushButton()
-        back_btn_icon_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Btn icons/back_btn.png")
+        back_btn_icon_path = os.path.join(base_dir, "assets", "Btn icons", "back_btn.png")
         self.back_btn.setCursor(Qt.CursorShape.PointingHandCursor)
         self.back_btn.setIcon(QIcon(back_btn_icon_path))
         self.back_btn.setIconSize(QSize(40,40))
         self.back_btn.setFlat(True)
         self.back_btn.setToolTip("Back")
+        self.back_btn.clicked.connect(self.close_appointment_window)
 
         self.header_text = QLabel("Book Appointment")
         self.confirm_btn = QPushButton("Confirm")
@@ -263,12 +284,25 @@ class addAppointment(QMainWindow):
 
 #======= success screen ======== start
 
-        success_layout = QHBoxLayout()  
+        confirmation_layout = QVBoxLayout()
+        confirmation_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        confirmation_container = QWidget()
+        confirmation_container.setLayout(confirmation_layout)
+
+        self.confirmation_container = Confirmation()
+        confirmation_layout.addWidget(self.confirmation_container)
+
+        success_layout = QVBoxLayout()
+        success_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+        success_layout.setContentsMargins(0, 10, 0, 0)
         success_container = QWidget()
         success_container.setLayout(success_layout)
 
-        self.success_container = successScreen()
-        self.stepbystep_forms.addWidget(self.success_container)    
+        self.success_container = successScreen(main_window=self.main_window)
+        success_layout.addWidget(self.success_container)
+        
+        self.stepbystep_forms.addWidget(confirmation_container)
+        self.stepbystep_forms.addWidget(success_container)
 
 #======= success screen ======== end
 
@@ -314,29 +348,17 @@ class addAppointment(QMainWindow):
     def next_step(self):
         self.progress_bar.confirm_step()
         self.form_count +=1
-        self.stepbystep_forms.setCurrentIndex(self.form_count)  
+        self.stepbystep_forms.setCurrentIndex(self.form_count)
+
+    def close_appointment_window(self):
+         if self.main_window:
+            self.main_window.show()
+         self.close()
 
 #======= signals and event calls ======== end
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-
-    base_dir = Path(__file__).resolve().parent.parent
-    addappointment_qss = base_dir / "styles" / "addAppointment.qss"
-
-    if addappointment_qss.exists():
-       app.setStyleSheet(addappointment_qss.read_text())
-
-    # it cant find the widget folder since this .py file is in the widget folder
-    # can't use the .parent method above and won't work that way
-    if str(base_dir) not in sys.path:
-        sys.path.insert(0, str(base_dir))
-
-    # sys.path needs to find the file first before it must be loaded
-    from widget.Progress_bar import ProgressBar
-    from successScreen import successScreen
-
-
     window = addAppointment()
     window.show()
     sys.exit(app.exec())
