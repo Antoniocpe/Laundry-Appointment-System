@@ -2,11 +2,19 @@ QWidget {
     background-color: #ebf1fa;
 }
 
- QLabel {
-    color: #303030;
-}
+QLabel { 
+    color: #303030; 
+    background-color: transparent; 
+} 
 
-#addApptBtn {
+
+#Dashboard_style #header {
+    font-size: 26px; 
+    font-weight: 800; 
+    color: #2c4d70; 
+} 
+
+QPushButton#addApptBtn { 
     border: none;
     border-radius: 8px;
     padding: 8px;
@@ -15,48 +23,126 @@ QWidget {
     text-align: center;
     color: #fcfeff;
     margin-right: 20px;
+} 
+
+QPushButton#addApptBtn:hover { 
+    background-color: #5582ad; 
+} 
+
+QPushButton#addApptBtn:pressed {
+    background-color: #4a739d; 
+} 
+
+#inQueue_text { 
+    font-size: 14px; 
+    font-weight: bold; 
+    color: #1f2d3d; 
+} 
+
+#total_text { 
+    font-size: 12px; 
+    color: #4a4a4a; 
+} 
+
+
+QFrame#washers_panel { 
+    background-color: #ffffff; 
+    border-radius: 16px; 
+} 
+
+
+QWidget#customerCard { 
+    background-color: transparent; 
+    border: 2px solid transparent; 
+    border-radius: 12px; 
+} 
+
+QWidget#customerCard[selected="true"] { 
+    background-color: #f1f6fc; 
+    border: 2px solid #b6c9e0; 
+} 
+
+#customer_name { 
+    font-size: 12px; 
+    font-weight: bold; 
+    color: #2c3e50; 
+} 
+
+#cardLine { 
+    background-color: #c8cfd8; 
+    border: none; 
+} 
+
+
+QFrame#details_layout { 
+    background-color: #ffffff; 
+} 
+
+#details_stack, 
+#details_page { 
+    background-color: transparent; 
+} 
+
+#details_placeholder { 
+    color: #939393; 
+    font-size: 15px; 
+} 
+
+#details_title { 
+    font-size: 14px; 
+    font-weight: bold; 
+    color: #2c4d70; 
+} 
+
+QLabel[tag="sectionTitle"] { 
+    font-size: 12px; 
+    font-weight: bold; 
+    color: #1f2d3d; 
+} 
+
+QLabel[tag="fieldLabel"] { 
+    font-size: 12px; 
+    color: #303030;
 }
 
-#inQueue_text {
+QLabel[tag="fieldValue"] { 
+    font-size: 12px; 
+    color: #5a5a5a; 
+} 
+
+
+QComboBox#statusCombo { 
+    background-color: #e5484d;           
+    color: #ffffff; 
+    border: none;
+    border-radius: 8px;
+    padding: 6px 12px; 
+    min-height: 22px; 
+    font-size: 13px; 
     font-weight: bold;
-    padding-left: 10px;
 }
 
-#total_text {
-    padding-left: 20px;
+QComboBox#statusCombo[status="progress"] { 
+    background-color: #f0a93a; 
 }
 
-#washers_scrollable_layout {
-    background-color: #FFFFFF;
-    border-radius: 15px;
-    margin: 20px;
-    margin-top: 0px;
+QComboBox#statusCombo[status="pickup"] { 
+    background-color: #5fc75f; 
 }
 
-#customers_layout {
-    background-color: #FFFFFF;
-    border-radius: 15px;
-    margin: 20px;
-    margin-top: 0px;
+QComboBox#statusCombo::drop-down { 
+    subcontrol-origin: padding; 
+    subcontrol-position: center right; 
+    width: 32px; 
+    border: none; 
+    background: transparent; 
 }
 
-#customer_name {
-    padding-right: 10px;
-    background-color: transparent;
-    font-size: 14px;
-    font-weight: bold;
-}
-
-#statusDot {
-    padding-left: 50px;
-}
-
-QFrame#details_layout {
-    background-color: #FFFFFF;
-}
-
-#details_placeholder {
-    background-color: transparent;
-    color: #939393;
-    font-size: 15px;
-}
+QComboBox QAbstractItemView { 
+    background-color: #ffffff; 
+    color: #303030; 
+    border: 1px solid #c8cfd8; 
+    selection-background-color: #dbe7f5; 
+    selection-color: #303030; 
+    outline: 0; 
+} 
