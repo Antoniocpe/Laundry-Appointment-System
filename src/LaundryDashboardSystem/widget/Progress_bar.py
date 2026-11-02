@@ -25,6 +25,15 @@ class ProgressBar(QWidget):
             self.update()
         else:
             pass
+
+    def previous_step(self):
+        if self.step_count == 1:
+            self.circle_color2 = QColor("#a8a8a8")
+            self.circle_color3 = QColor("#a8a8a8")
+            self.step_count -= 1
+            self.update()
+        else:
+            pass
         
     
     def paintEvent(self, event):
