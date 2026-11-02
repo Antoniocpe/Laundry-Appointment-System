@@ -53,12 +53,18 @@ class MainWindow(QWidget):
 
         # ===== Layout =====
         sidebar_layout = QVBoxLayout()
-        for b in self.sidebar_buttons + [self.exit_btn]:
-            sidebar_layout.addWidget(b)
+        sidebar_layout.setContentsMargins(0, 18, 0, 18) #NEW
+        sidebar_layout.setSpacing(14) #NEW
+        center = Qt.AlignmentFlag.AlignHCenter #NEW
+        sidebar_layout.addWidget(self.dashboard_btn, alignment=center) #NEW
+        sidebar_layout.addWidget(self.transaction_btn, alignment=center) #NEW
+        sidebar_layout.addWidget(self.about_btn, alignment=center) #NEW
+        sidebar_layout.addWidget(self.exit_btn, alignment=center) #NEW
 
         sidebar_container = QFrame()
         sidebar_container.setLayout(sidebar_layout)
         sidebar_container.setObjectName("sidebar_layout")
+        sidebar_container.setFixedWidth(50) #NEW
 
         main_layout = QHBoxLayout(self)
         main_layout.addWidget(sidebar_container, stretch=0)
@@ -84,7 +90,8 @@ class MainWindow(QWidget):
         if icon_path.exists():
             btn.setIcon(QIcon(str(icon_path)))
 
-        btn.setIconSize(QSize(60, 60))
+        btn.setIconSize(QSize(62, 62)) 
+        btn.setFixedSize(48, 48) 
         btn.setToolTip(tooltip)
         btn.setObjectName(object_name)
         self.set_style_property(btn, "SidebarBtnClass", "sidebar-buttons")
@@ -116,8 +123,6 @@ if __name__ == "__main__":
     # Dashboard_style.qss is inside the styles folder
     dashboard_qss = base_dir / "styles" / "Dashboard_style.qss"
 
-    transaction_qss = base_dir / "styles" / "Transaction_style.qss"
-
     # 3. Read and apply the stylesheets safely
     style_sheets = []
 
@@ -130,11 +135,6 @@ if __name__ == "__main__":
         style_sheets.append(dashboard_qss.read_text())
     else:
         print(f"Warning: Could not find dashboard style at {dashboard_qss}")
-
-    if dashboard_qss.exists():
-        style_sheets.append(transaction_qss.read_text())
-    else:
-        print(f"Warning: Could not find dashboard style at {transaction_qss}")
 
     # Apply the combined styles to the app
     app.setStyleSheet("\n".join(style_sheets))
