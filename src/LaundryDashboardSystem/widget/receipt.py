@@ -5,8 +5,9 @@ from PyQt6.QtGui import QIcon, QTransform, QPixmap
 
 from pathlib import Path
 
+
 class MoreDetails(QWidget):
-    def __init__(self, transit_fee=0, service_fee=0, addOns_fee=0):
+    def __init__(self, transit_fee=9999, service_fee=9999, addOns_fee=9999):
         super().__init__()
 
         MoreDetails_header = QLabel("Transaction Details")
@@ -22,7 +23,7 @@ class MoreDetails(QWidget):
         AddOns_fee_label = QLabel(f"{addOns_fee}")   
         AddOns_fee_label.setAlignment(Qt.AlignmentFlag.AlignRight)
 
-        more_total_fee = QLabel("Total: 0")
+        more_total_fee = QLabel("Total: $9999")
         more_total_fee.setAlignment(Qt.AlignmentFlag.AlignRight)
 
         MoreDetails_layout = QGridLayout(self)
@@ -49,10 +50,10 @@ class Receipt(QFrame):
         super().__init__()
         self.setObjectName("Receipt")
 
-        self.moreDetails = MoreDetails(0, 0, 0)
+        self.moreDetails = MoreDetails("$$$$$", "$$$$$", "$$$$$")
 
         self.customer_name = QLabel("Customer")
-        self.total_cost = QLabel("0")
+        self.total_cost = QLabel("$9999")
         self.total_cost.setAlignment(Qt.AlignmentFlag.AlignRight)
 
         self.book_date = QLabel(f"Day of Booking: {book_day}")

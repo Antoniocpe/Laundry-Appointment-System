@@ -1,8 +1,8 @@
 import sys
 from PyQt6.QtCore import Qt, QRectF, QSize, pyqtSignal 
 from PyQt6.QtWidgets import (QApplication, QWidget, QLabel, QFrame, 
-                             QGridLayout, QHBoxLayout) 
-from PyQt6.QtGui import QPainter, QPen, QColor 
+                            QGridLayout, QHBoxLayout)
+from PyQt6.QtGui import QPainter, QPen, QColor, QPalette
 
 from pathlib import Path
 
