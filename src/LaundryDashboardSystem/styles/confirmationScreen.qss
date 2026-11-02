@@ -18,8 +18,7 @@
 #confirmation_qss QLabel[tag="placeholderLabel"]{
     color: black;
     font-size: 15px;
-    font-weight: bold;
-    padding: 2px;
+    padding: 1px;
 }
 
 #confirmation_qss #main_container{
