@@ -1,10 +1,10 @@
 import sys, os
-from PyQt6.QtCore import Qt, QSize
+from PyQt6.QtCore import Qt, QSize, QDateTime, QRegularExpression
 from PyQt6.QtWidgets import (QApplication, QWidget, QLabel, QMainWindow,
-                             QGridLayout, QPushButton, QVBoxLayout,
-                             QHBoxLayout, QStackedWidget, QLineEdit, QRadioButton)
+                             QGridLayout, QPushButton, QVBoxLayout,QHBoxLayout, 
+                             QStackedWidget, QLineEdit, QRadioButton, QCheckBox, QButtonGroup)
 
-from PyQt6.QtGui import QIcon
+from PyQt6.QtGui import QIcon, QRegularExpressionValidator
 from pathlib import Path
 
 # it cant find the widget folder since this .py file is in the widget folder
@@ -95,6 +95,9 @@ class addAppointment(QMainWindow):
 
 #======= personal details ======== start
 
+        characters_only = QRegularExpression("^[a-zA-Z\\s]*$")
+        numbers_only = QRegularExpression("^[0-9\\+\\-\\s]*$")
+
         personalDetails_layout = QGridLayout()
         personalDetails_layout.setContentsMargins(0,0,0,6)
         personalDetails_layout.setHorizontalSpacing(15)
@@ -111,6 +114,7 @@ class addAppointment(QMainWindow):
         self.first_name.setFixedWidth(250)
         self.first_name.setFixedHeight(28)
         self.first_name.setContentsMargins(10,0,0,0)
+        self.first_name.setValidator(QRegularExpressionValidator(characters_only, self))
 
         self.last_name_label = QLabel("Last Name")
         self.last_name_label.setContentsMargins(10,0,0,0)
@@ -118,6 +122,7 @@ class addAppointment(QMainWindow):
         self.last_name.setFixedWidth(250)
         self.last_name.setFixedHeight(28)
         self.last_name.setContentsMargins(10,0,0,0)
+        self.last_name.setValidator(QRegularExpressionValidator(characters_only, self))
 
         self.phone_no_label = QLabel("Phone No.")
         self.phone_no_label.setContentsMargins(10,0,0,0)
@@ -125,6 +130,7 @@ class addAppointment(QMainWindow):
         self.phone_no.setFixedWidth(250)
         self.phone_no.setFixedHeight(28)
         self.phone_no.setContentsMargins(10,0,0,0)
+        self.phone_no.setValidator(QRegularExpressionValidator(numbers_only, self))
 
         self.email_address_label = QLabel("Email Address")
         self.email_address_label.setContentsMargins(10,0,0,0)
@@ -195,11 +201,13 @@ class addAppointment(QMainWindow):
         self.weight_laundry.setPlaceholderText("kg")
         self.weight_laundry.setContentsMargins(10,0,0,0)
         self.weight_laundry.setFixedWidth(165)
+        self.weight_laundry.setValidator(QRegularExpressionValidator(numbers_only, self))
 
         self.garment_count_label = QLabel("Count of Garments")
         self.garment_count = QLineEdit()
         self.garment_count.setPlaceholderText("#")
         self.garment_count.setFixedWidth(135)
+        self.garment_count.setValidator(QRegularExpressionValidator(numbers_only, self))
 
         self.addons_label = QLabel("Add-ons")
         self.addons_label.setContentsMargins(0,0,0,0)
@@ -210,11 +218,10 @@ class addAppointment(QMainWindow):
         addons_container = QWidget()
         addons_container.setLayout(addons_layout)
 
-        self.addons_option1 = QRadioButton("Fabric Softener")
-        self.addons_option1.setChecked(True)
-        self.addons_option2 = QRadioButton("Bleach")
-        self.addons_option3 = QRadioButton("Baking Soda")
-        self.addons_option4 = QRadioButton("Extra Spin") 
+        self.addons_option1 = QCheckBox("Fabric Softener")
+        self.addons_option2 = QCheckBox("Bleach")
+        self.addons_option3 = QCheckBox("Baking Soda")
+        self.addons_option4 = QCheckBox("Extra Spin") 
 
         self.laundry_note_label = QLabel("Note/Additional Requests")
         self.laundry_note = QLineEdit()
@@ -252,16 +259,26 @@ class addAppointment(QMainWindow):
         schedule_container = QWidget()
         schedule_container.setLayout(schedule_layout)
 
+        self.schedule_buttons = QButtonGroup(self)
+        self.schedule_buttons.setExclusive(True)
+
         self.schedule_label = QLabel("Schedule Pick-Up/Delivery")
         self.priority_btn = QPushButton("Priority\n15~60mins")
         self.priority_btn.setContentsMargins(10,0,0,0)
 
         self.priority_btn = QPushButton("Priority\n15~60 mins")
         self.priority_btn.setContentsMargins(10,0,0,0)
+        self.priority_btn.setCheckable(True)
         self.same_day_btn = QPushButton("Same-Day\n~24 hours")
         self.same_day_btn.setContentsMargins(10,0,0,0)
+        self.same_day_btn.setCheckable(True)
         self.standard_btn = QPushButton("Standard\n24~ hours")
         self.standard_btn.setContentsMargins(10,0,0,0)
+        self.standard_btn.setCheckable(True)
+
+        self.schedule_buttons.addButton(self.priority_btn)
+        self.schedule_buttons.addButton(self.same_day_btn)
+        self.schedule_buttons.addButton(self.standard_btn)
 
         schedule_layout.addWidget(self.schedule_label, 0,0,1,2, alignment=Qt.AlignmentFlag.AlignLeft)
         schedule_layout.addWidget(self.priority_btn, 1,0, alignment=Qt.AlignmentFlag.AlignLeft)
@@ -346,6 +363,9 @@ class addAppointment(QMainWindow):
 #======= signals and event calls ======== start
 
     def next_step(self):
+        if self.form_count == 1:
+           self.save_appointment_details()
+
         self.progress_bar.confirm_step()
         self.form_count +=1
         self.stepbystep_forms.setCurrentIndex(self.form_count)
@@ -355,7 +375,89 @@ class addAppointment(QMainWindow):
             self.main_window.show()
          self.close()
 
+    def save_appointment_details(self):
+        try:
+
+            data_dir = base_dir / "data"
+
+            current = QDateTime.currentDateTime()
+            timestamp = current.toString("hh-mm-ss_AP")
+            date = current.toString("MM-dd-yyyy")
+        
+            first_name = self.first_name.text().strip()
+            last_name = self.last_name.text().strip()
+            phone_no = self.phone_no.text().strip()
+            email_address = self.email_address.text().strip()
+            home_address = self.home_address.text().strip()
+
+            if not first_name or not last_name:
+                return
+
+            service = "Wash-and-Fold" # just the default setting 
+            if self.services_option1.isChecked():
+                service = "Wash-and-Fold"
+            elif self.services_option2.isChecked():
+                service = "Dry-Cleaning"
+            elif self.services_option3.isChecked():
+                service = "Pressing & Ironing"
+
+            addons = []
+            if self.addons_option1.isChecked():
+                addons.append("Fabric Softener")
+            if self.addons_option2.isChecked():
+                addons.append("Bleach")
+            if self.addons_option3.isChecked():
+                addons.append("Baking Soda")
+            if self.addons_option4.isChecked():
+                addons.append("Extra Spin")
+
+            if addons:
+                list_addons =", ".join(addons) if addons else "None"
+
+            weight_laundry = self.weight_laundry.text().strip()
+            garment_count = self.garment_count.text().strip()
+            laundry_note = self.laundry_note.text().strip()
+
+            schedule_delivery = "None Selected"
+            if self.priority_btn.isChecked():
+                schedule_delivery = "Priority: 15-60 mins"
+            elif self.same_day_btn.isChecked():
+                schedule_delivery = "Same Day: ~24 hours"
+            elif self.standard_btn.isChecked():
+                schedule_delivery = "Standard: 24~ hours"
+
+            content = (
+
+                f"Date of Appointment: {date}   Time: {timestamp}\n\n"  
+                f"First Name: {first_name}\n"
+                f"Last Name: {last_name}\n"
+                f"Phone No.: {phone_no}\n"
+                f"Email Address: {email_address}\n"
+                f"Home Address: {home_address}\n"
+                f"Service: {service}\n\n"
+
+                "Laundry Specifications:\n" 
+                f"Weight of Laundry (kg): {weight_laundry}kg\n"
+                f"Count of Garments: {garment_count}\n" 
+                f"Add-ons: {list_addons}\n"
+                f"Note/Additional Requests: {laundry_note}\n"
+
+                f"Schedule Pick-up/Delivery: {schedule_delivery}\n" 
+
+
+            )
+
+            filename = f"Appointment_{last_name}_{date}_{timestamp}.txt"
+            full_path = os.path.join(data_dir, filename)
+
+            with open(full_path, "w") as file:
+                file.write(content)
+
+        except Exception as e:
+            print(f"Auto-save failed: {e}")
+
 #======= signals and event calls ======== end
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
