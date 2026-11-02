@@ -26,21 +26,60 @@ class Transaction(QWidget):
         main_layout.addWidget(self.header)
         main_layout.addWidget(scroll_area)
 
-        dates = [["0", "0", "0"], ["1", "1", "1"]]
         self.receipts = []
 
-        for book_day, service_day, receive_day in dates:
-            receipt = Receipt(book_day, service_day, receive_day)
-            self.receipts.append(receipt)
-            receipts_layout.addWidget(receipt)
+        base_dir = Path(__file__).resolve().parent.parent
+        data_dir = base_dir / "data"
+
+        if data_dir.exists() and data_dir.is_dir():
+            appointment_files = sorted(data_dir.glob("Appointment_*.txt"), reverse=True)
+
+            for file_path in appointment_files:
+                try:
+                    content = file_path.read_text()
+                    
+                    data = {}
+                    fn, ln = "", ""
+                    
+                    for line in content.splitlines():
+                        if ":" not in line:
+                            continue
+                        
+                        parts = line.split(":", 1)
+                        key = parts[0].strip()
+                        val = parts[1].strip()
+
+                        if "First Name" in key:
+                            fn = val
+                        elif "Last Name" in key:
+                            ln = val
+                        elif "Date of Appointment" in key:
+                            data["date"] = val.split("Time:")[0].strip()
+    
+
+                    customer_full_name = f"{fn} {ln}".strip() if (fn or ln) else "Valued Customer"
+                    appointment_date = data.get("date", "MM/DD/YYYY")
+
+                    # Reuse the appointment date for all three receipt labels
+                    receipt = Receipt(
+                        book_day=appointment_date, 
+                        service_day=appointment_date, 
+                        receive_day=appointment_date
+                    )
+                    
+                    receipt.customer_name.setText(customer_full_name)
+                    receipt.total_cost.setText("$9999")
+
+                    self.receipts.append(receipt)
+                    receipts_layout.addWidget(receipt)
+
+                except Exception as e:
+                    print(f"Failed to load transaction file {file_path.name}: {e}")
 
         receipts_layout.addStretch()
-
         self.header.setObjectName("header")
 
         
-
-
 if __name__ == "__main__":
     app = QApplication(sys.argv)
 

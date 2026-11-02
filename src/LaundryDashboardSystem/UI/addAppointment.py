@@ -449,7 +449,7 @@ class addAppointment(QMainWindow):
             self.form_count -= 1
             self.stepbystep_forms.setCurrentIndex(self.form_count)
         else:
-         
+
          if self.main_window:
             self.main_window.show()
          self.close()
@@ -490,7 +490,7 @@ class addAppointment(QMainWindow):
                 schedule_delivery = "Same Day: ~24 hours"
             elif self.standard_btn.isChecked():
                 schedule_delivery = "Standard: 24~ hours"
-              
+
             self.confirmation_container.name.setText(f"{first_name} {last_name}")
             self.confirmation_container.delivery_option.setText(schedule_delivery)
             self.confirmation_container.ls_options_label.setText(f"Service: {service}")
@@ -508,7 +508,7 @@ class addAppointment(QMainWindow):
             current = QDateTime.currentDateTime()
             timestamp = current.toString("hh-mm-ss_AP")
             date = current.toString("MM-dd-yyyy")
-        
+
             first_name = self.first_name.text().strip()
             last_name = self.last_name.text().strip()
             phone_no = self.phone_no.text().strip()
@@ -578,7 +578,6 @@ class addAppointment(QMainWindow):
             print(f"Auto-save failed: {e}")
 
 #======= signals and event calls ======== end
-
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

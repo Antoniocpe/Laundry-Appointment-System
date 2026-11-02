@@ -91,12 +91,12 @@ class Confirmation(QWidget):
         contents_layout.addWidget(self.name, 1, 1, alignment= Qt.AlignmentFlag.AlignRight)
         contents_layout.addWidget(self.delivery_option_label, 2, 0)
         contents_layout.addWidget(self.delivery_option, 2, 1, alignment= Qt.AlignmentFlag.AlignRight)
-        contents_layout.addWidget(self.laundry_specification_label, 3, 0)
-        contents_layout.addWidget(self.ls_options_label, 4,0)
-        contents_layout.addWidget(self.ls_options_label2, 5,0)
-        contents_layout.addWidget(self.ls_options_label3, 6,0)
-        contents_layout.addWidget(self.ls_options_label4, 7,0)
-        contents_layout.addWidget(self.ls_options_label5, 8,0)
+        contents_layout.addWidget(self.laundry_specification_label, 3, 0, 1, 2)
+        contents_layout.addWidget(self.ls_options_label, 4, 0, 1, 2)
+        contents_layout.addWidget(self.ls_options_label2, 5, 0, 1, 2)
+        contents_layout.addWidget(self.ls_options_label3, 6, 0, 1, 2)
+        contents_layout.addWidget(self.ls_options_label4, 7, 0, 1, 2)
+        contents_layout.addWidget(self.ls_options_label5, 8, 0, 1, 2)
 
 #======= contents ======== end
 
