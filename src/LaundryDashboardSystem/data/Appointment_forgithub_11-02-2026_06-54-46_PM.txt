@@ -1,0 +1,15 @@
+Date of Appointment: 11-02-2026   Time: 06-54-46_PM
+
+First Name: FirstNameLastName
+Last Name: forgithub
+Phone No.: 123456789
+Email Address: emailaddress@something.com
+Home Address: sanamakapasaako street
+Service: Wash-and-Fold
+
+Laundry Specifications:
+Weight of Laundry (kg): 1000kg
+Count of Garments: 1000
+Add-ons: Fabric Softener, Bleach, Baking Soda, Extra Spin
+Note/Additional Requests: para lang talaga sa github to ayaw empty folder eh
+Schedule Pick-up/Delivery: Standard: 24~ hours
