@@ -25,7 +25,7 @@ class successScreen(QWidget):
         if successScreen_qss.exists():
             self.setStyleSheet(successScreen_qss.read_text())
 
-        self.setFixedSize(800, 400)
+        self.setFixedSize(790, 400)
         self.setObjectName("sucessScreen_qss")
 
         self.main_window = main_window
@@ -61,19 +61,29 @@ class successScreen(QWidget):
         success_container = QWidget()
         success_container.setLayout(success_layout)
         
+
+        checkmark_layout = QGridLayout()
+        checkmark_layout.setContentsMargins(0, 0, 0, 0)
+        checkmark_layout.setSpacing(2)
+
+        checkmark_container = QWidget()
+        checkmark_container.setLayout(checkmark_layout)
  
         self.checkmark = Checkmark()
+
+        checkmark_layout.addWidget(self.checkmark, 0, 0, alignment=Qt.AlignmentFlag.AlignCenter)
+
         self.prcd_dashboard_btn = QPushButton("Proceed to Dashboard")
         self.prcd_dashboard_btn.setFixedSize(220, 35)
         self.prcd_dashboard_btn.setContentsMargins(0, 10, 0, 0)
         self.prcd_dashboard_btn.clicked.connect(self.close_appointment_window)
         self.thank_you_label = QLabel("Thank you for trusting us!")
 
-        success_layout.addWidget(self.checkmark, 0, 0, alignment=Qt.AlignmentFlag.AlignCenter)
         success_layout.addWidget(self.prcd_dashboard_btn, 1, 0, alignment=Qt.AlignmentFlag.AlignCenter)
         success_layout.addWidget(self.thank_you_label, 2, 0, alignment=Qt.AlignmentFlag.AlignCenter)
 
         main_layout.addWidget(header_container, stretch=0)
+        main_layout.addWidget(checkmark_container,stretch=2)
         main_layout.addWidget(success_container, stretch=0)
 
 #======= object names ======== start

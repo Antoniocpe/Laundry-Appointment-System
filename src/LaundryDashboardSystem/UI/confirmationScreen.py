@@ -74,14 +74,16 @@ class Confirmation(QWidget):
         self.total_cost_label = QLabel("Total Cost:")
         self.total_cost = QLabel("$9999")
         self.name_label = QLabel("Name:")
-        self.name = QLabel("[insert name]")       
+        self.name = QLabel(" ")       
         self.delivery_option_label = QLabel("Option of Delivery:")
-        self.delivery_option = QLabel("[insert option of delivery]")
+        self.delivery_option = QLabel(" ")
         self.laundry_specification_label= QLabel("Laundry Specifications:")
 
-        self.ls_options_label = QLabel("[insert specification here]")
-        self.ls_options_label2 = QLabel("[insert specification here]")
-        self.ls_options_label3 = QLabel("[insert specification here]")
+        self.ls_options_label = QLabel(" ")
+        self.ls_options_label2 = QLabel(" ")
+        self.ls_options_label3 = QLabel(" ")
+        self.ls_options_label4 = QLabel(" ")
+        self.ls_options_label5 = QLabel(" ")
 
         contents_layout.addWidget(self.total_cost_label, 0, 0)
         contents_layout.addWidget(self.total_cost, 0, 1, alignment= Qt.AlignmentFlag.AlignRight)
@@ -93,6 +95,8 @@ class Confirmation(QWidget):
         contents_layout.addWidget(self.ls_options_label, 4,0)
         contents_layout.addWidget(self.ls_options_label2, 5,0)
         contents_layout.addWidget(self.ls_options_label3, 6,0)
+        contents_layout.addWidget(self.ls_options_label4, 7,0)
+        contents_layout.addWidget(self.ls_options_label5, 8,0)
 
 #======= contents ======== end
 
@@ -115,6 +119,8 @@ class Confirmation(QWidget):
         self.ls_options_label.setProperty("tag", "placeholderLabel")
         self.ls_options_label2.setProperty("tag", "placeholderLabel")
         self.ls_options_label3.setProperty("tag", "placeholderLabel")
+        self.ls_options_label4.setProperty("tag", "placeholderLabel")
+        self.ls_options_label5.setProperty("tag", "placeholderLabel")
 
 
 #======= object names ======== end

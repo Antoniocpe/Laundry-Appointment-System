@@ -2,7 +2,8 @@ import sys, os
 from PyQt6.QtCore import Qt, QSize, QDateTime, QRegularExpression
 from PyQt6.QtWidgets import (QApplication, QWidget, QLabel, QMainWindow,
                              QGridLayout, QPushButton, QVBoxLayout,QHBoxLayout, 
-                             QStackedWidget, QLineEdit, QRadioButton, QCheckBox, QButtonGroup)
+                             QStackedWidget, QLineEdit, QRadioButton, QCheckBox, 
+                             QButtonGroup, QMessageBox)
 
 from PyQt6.QtGui import QIcon, QRegularExpressionValidator
 from pathlib import Path
@@ -97,6 +98,9 @@ class addAppointment(QMainWindow):
 
         characters_only = QRegularExpression("^[a-zA-Z\\s]*$")
         numbers_only = QRegularExpression("^[0-9\\+\\-\\s]*$")
+        red_asterisk = "<span style='color: red;'>*</span>"   #an alternative is another qlabel but that will take
+                                                              #alot of time by creating another container and adjust layouts and such
+                                                              #html attributes can be use on QLabel
 
         personalDetails_layout = QGridLayout()
         personalDetails_layout.setContentsMargins(0,0,0,6)
@@ -108,7 +112,7 @@ class addAppointment(QMainWindow):
 
         self.personalDetails_label = QLabel("Personal Details")
 
-        self.first_name_label = QLabel("First Name")
+        self.first_name_label = QLabel(f"First Name{red_asterisk}")
         self.first_name_label.setContentsMargins(10,0,0,0)
         self.first_name = QLineEdit()
         self.first_name.setFixedWidth(250)
@@ -116,7 +120,7 @@ class addAppointment(QMainWindow):
         self.first_name.setContentsMargins(10,0,0,0)
         self.first_name.setValidator(QRegularExpressionValidator(characters_only, self))
 
-        self.last_name_label = QLabel("Last Name")
+        self.last_name_label = QLabel(f"Last Name{red_asterisk}")
         self.last_name_label.setContentsMargins(10,0,0,0)
         self.last_name = QLineEdit()
         self.last_name.setFixedWidth(250)
@@ -124,7 +128,7 @@ class addAppointment(QMainWindow):
         self.last_name.setContentsMargins(10,0,0,0)
         self.last_name.setValidator(QRegularExpressionValidator(characters_only, self))
 
-        self.phone_no_label = QLabel("Phone No.")
+        self.phone_no_label = QLabel(f"Phone No.{red_asterisk}")
         self.phone_no_label.setContentsMargins(10,0,0,0)
         self.phone_no = QLineEdit()
         self.phone_no.setFixedWidth(250)
@@ -132,14 +136,14 @@ class addAppointment(QMainWindow):
         self.phone_no.setContentsMargins(10,0,0,0)
         self.phone_no.setValidator(QRegularExpressionValidator(numbers_only, self))
 
-        self.email_address_label = QLabel("Email Address")
+        self.email_address_label = QLabel(f"Email Address{red_asterisk}")
         self.email_address_label.setContentsMargins(10,0,0,0)
         self.email_address = QLineEdit()
         self.email_address.setFixedWidth(250)
         self.email_address.setFixedHeight(28)
         self.email_address.setContentsMargins(10,0,0,0)
 
-        self.home_address_label = QLabel("Home Address")
+        self.home_address_label = QLabel(f"Home Address{red_asterisk}")
         self.home_address_label.setContentsMargins(10,0,0,0)
         self.home_address = QLineEdit()
         self.home_address.setFixedWidth(250)
@@ -194,7 +198,7 @@ class addAppointment(QMainWindow):
 
         self.specification_label = QLabel("Laundry Specifications")
 
-        self.weight_laundry_label = QLabel("Weight of Laundry (kg)")
+        self.weight_laundry_label = QLabel(f"Weight of Laundry (kg){red_asterisk}")
         self.weight_laundry_label.setContentsMargins(10,0,0,0)
 
         self.weight_laundry = QLineEdit()
@@ -203,7 +207,7 @@ class addAppointment(QMainWindow):
         self.weight_laundry.setFixedWidth(165)
         self.weight_laundry.setValidator(QRegularExpressionValidator(numbers_only, self))
 
-        self.garment_count_label = QLabel("Count of Garments")
+        self.garment_count_label = QLabel(f"Count of Garments{red_asterisk}")
         self.garment_count = QLineEdit()
         self.garment_count.setPlaceholderText("#")
         self.garment_count.setFixedWidth(135)
@@ -269,6 +273,7 @@ class addAppointment(QMainWindow):
         self.priority_btn = QPushButton("Priority\n15~60 mins")
         self.priority_btn.setContentsMargins(10,0,0,0)
         self.priority_btn.setCheckable(True)
+        self.priority_btn.setChecked(True)
         self.same_day_btn = QPushButton("Same-Day\n~24 hours")
         self.same_day_btn.setContentsMargins(10,0,0,0)
         self.same_day_btn.setCheckable(True)
@@ -363,19 +368,98 @@ class addAppointment(QMainWindow):
 #======= signals and event calls ======== start
 
     def next_step(self):
+        if self.form_count == 0:
+           
+           required_info = [
+            self.first_name,
+            self.last_name,
+            self.phone_no,
+            self.email_address,
+            self.home_address,
+            self.weight_laundry,
+            self.garment_count
+        ]
+           if any(not information.text().strip() for information in required_info):
+            QMessageBox.warning(self,'Warning','All required fields must be filled.')
+            return
+           
+           self.confirm_appointment_data()
+
         if self.form_count == 1:
-           self.save_appointment_details()
+           self.save_appointment_data()
 
         self.progress_bar.confirm_step()
         self.form_count +=1
         self.stepbystep_forms.setCurrentIndex(self.form_count)
 
+        if self.form_count == 2:
+            self.confirm_btn.setVisible(False)
+            transparent_png_path = os.path.join(base_dir, "assets", "Btn icons", "transparent.png")
+            self.back_btn.setIcon(QIcon(transparent_png_path))
+            self.back_btn.setIconSize(QSize(40, 40))
+            self.back_btn.setFlat(True)
+            self.back_btn.setEnabled(False)
+            self.back_btn.setToolTip("")
+
+
     def close_appointment_window(self):
+
+        if self.form_count == 1:
+            self.progress_bar.previous_step()
+            self.form_count -= 1
+            self.stepbystep_forms.setCurrentIndex(self.form_count)
+        else:
+         
          if self.main_window:
             self.main_window.show()
          self.close()
 
-    def save_appointment_details(self):
+    def confirm_appointment_data(self):
+
+            first_name = self.first_name.text().strip()
+            last_name = self.last_name.text().strip()
+
+            service = "Wash-and-Fold" # just the default setting 
+            if self.services_option1.isChecked():
+             service = "Wash-and-Fold"
+            elif self.services_option2.isChecked():
+                service = "Dry-Cleaning"
+            elif self.services_option3.isChecked():
+                service = "Pressing & Ironing"
+
+            addons = []
+            if self.addons_option1.isChecked():
+                addons.append("Fabric Softener")
+            if self.addons_option2.isChecked():
+                addons.append("Bleach")
+            if self.addons_option3.isChecked():
+                addons.append("Baking Soda")
+            if self.addons_option4.isChecked():
+                addons.append("Extra Spin")
+
+            list_addons =", ".join(addons) if addons else "None"
+
+            weight_laundry = self.weight_laundry.text().strip()
+            garment_count = self.garment_count.text().strip()
+            laundry_note = self.laundry_note.text().strip() or "None"
+
+            schedule_delivery = "None Selected"
+            if self.priority_btn.isChecked():
+                schedule_delivery = "Priority: 15-60 mins"
+            elif self.same_day_btn.isChecked():
+                schedule_delivery = "Same Day: ~24 hours"
+            elif self.standard_btn.isChecked():
+                schedule_delivery = "Standard: 24~ hours"
+              
+            self.confirmation_container.name.setText(f"{first_name} {last_name}")
+            self.confirmation_container.delivery_option.setText(schedule_delivery)
+            self.confirmation_container.ls_options_label.setText(f"Service: {service}")
+            self.confirmation_container.ls_options_label2.setText(f"Weight of Laundry: {weight_laundry}kg")
+            self.confirmation_container.ls_options_label3.setText(f"Count of Garments: {garment_count} garment(s)")
+            self.confirmation_container.ls_options_label4.setText(f"Add-ons: {list_addons}")
+            self.confirmation_container.ls_options_label5.setText(f"Note/Additional Requests: {laundry_note}")
+
+    def save_appointment_data(self):
         try:
 
             data_dir = base_dir / "data"
@@ -411,12 +495,11 @@ class addAppointment(QMainWindow):
             if self.addons_option4.isChecked():
                 addons.append("Extra Spin")
 
-            if addons:
-                list_addons =", ".join(addons) if addons else "None"
+            list_addons =", ".join(addons) if addons else "None"
 
             weight_laundry = self.weight_laundry.text().strip()
             garment_count = self.garment_count.text().strip()
-            laundry_note = self.laundry_note.text().strip()
+            laundry_note = self.laundry_note.text().strip() or "None"
 
             schedule_delivery = "None Selected"
             if self.priority_btn.isChecked():
@@ -427,7 +510,6 @@ class addAppointment(QMainWindow):
                 schedule_delivery = "Standard: 24~ hours"
 
             content = (
-
                 f"Date of Appointment: {date}   Time: {timestamp}\n\n"  
                 f"First Name: {first_name}\n"
                 f"Last Name: {last_name}\n"
@@ -438,13 +520,11 @@ class addAppointment(QMainWindow):
 
                 "Laundry Specifications:\n" 
                 f"Weight of Laundry (kg): {weight_laundry}kg\n"
-                f"Count of Garments: {garment_count}\n" 
+                f"Count of Garments: {garment_count} garment(s)\n" 
                 f"Add-ons: {list_addons}\n"
                 f"Note/Additional Requests: {laundry_note}\n"
 
                 f"Schedule Pick-up/Delivery: {schedule_delivery}\n" 
-
-
             )
 
             filename = f"Appointment_{last_name}_{date}_{timestamp}.txt"
