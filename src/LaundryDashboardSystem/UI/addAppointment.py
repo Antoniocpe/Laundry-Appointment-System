@@ -1,5 +1,5 @@
 import sys, os
-from PyQt6.QtCore import Qt, QSize, QDateTime, QRegularExpression
+from PyQt6.QtCore import Qt, QSize, QDateTime, QRegularExpression, pyqtSignal #NEW
 from PyQt6.QtWidgets import (QApplication, QWidget, QLabel, QMainWindow,
                              QGridLayout, QPushButton, QVBoxLayout,QHBoxLayout, 
                              QStackedWidget, QLineEdit, QRadioButton, QCheckBox, 
@@ -20,6 +20,7 @@ from UI.successScreen import successScreen
 from UI.confirmationScreen import Confirmation
 
 class addAppointment(QMainWindow):
+    appointment_saved = pyqtSignal(dict) #NEW
     def __init__(self, main_window=None):
         super().__init__()
 
@@ -284,6 +285,8 @@ class addAppointment(QMainWindow):
         self.schedule_buttons.addButton(self.priority_btn)
         self.schedule_buttons.addButton(self.same_day_btn)
         self.schedule_buttons.addButton(self.standard_btn)
+        self.selected_schedule = None #NEW
+        self.schedule_buttons.buttonClicked.connect(self.on_schedule_selected) #NEW
 
         schedule_layout.addWidget(self.schedule_label, 0,0,1,2, alignment=Qt.AlignmentFlag.AlignLeft)
         schedule_layout.addWidget(self.priority_btn, 1,0, alignment=Qt.AlignmentFlag.AlignLeft)
@@ -367,26 +370,59 @@ class addAppointment(QMainWindow):
 
 #======= signals and event calls ======== start
 
+    def on_schedule_selected(self, button): #NEW
+        name, _, time = button.text().partition("\n") #NEW
+        self.selected_schedule = (name, time) #NEW
+
+    def collect_data(self): #NEW
+        schedule_btn = self.schedule_buttons.checkedButton() #NEW
+        schedule_name, _, schedule_time = schedule_btn.text().partition("\n") #NEW
+
+        addon_buttons = (self.addons_option1, self.addons_option2, self.addons_option3, self.addons_option4) #NEW
+        service_buttons = (self.services_option1, self.services_option2, self.services_option3) #NEW
+        service = next(b.text() for b in service_buttons if b.isChecked()) #NEW
+
+        return {
+            "first_name": self.first_name.text().strip(), "last_name": self.last_name.text().strip(), #NEW
+            "phone_no": self.phone_no.text().strip(), "email_address": self.email_address.text().strip(), #NEW
+            "home_address": self.home_address.text().strip(), "service": service.replace("&&", "&"), #NEW
+            "addons": [b.text() for b in addon_buttons if b.isChecked()], #NEW
+            "weight_kg": self.weight_laundry.text().strip(), #NEW
+            "garment_count": self.garment_count.text().strip(), #NEW
+            "note": self.laundry_note.text().strip(), #NEW
+            "schedule": schedule_name, "schedule_time": schedule_time #NEW
+        }
+
+    def validate(self): #NEW
+        required_info = [
+            self.first_name, self.last_name, self.phone_no, self.email_address,
+            self.home_address, self.weight_laundry, self.garment_count
+        ]
+        if any(not information.text().strip() for information in required_info):
+            return "All required fields must be filled."
+        if self.schedule_buttons.checkedButton() is None: #NEW
+            return "Please select a Pick-Up/Delivery schedule." #NEW
+        try: #NEW
+            float(self.weight_laundry.text()) #NEW
+            int(self.garment_count.text()) #NEW
+        except ValueError: #NEW
+            return "Weight must be a number and garment count must be a whole number." #NEW
+        return None #NEW
+
     def next_step(self):
         if self.form_count == 0:
-           
-           required_info = [
-            self.first_name,
-            self.last_name,
-            self.phone_no,
-            self.email_address,
-            self.home_address,
-            self.weight_laundry,
-            self.garment_count
-        ]
-           if any(not information.text().strip() for information in required_info):
-            QMessageBox.warning(self,'Warning','All required fields must be filled.')
-            return
-           
-           self.confirm_appointment_data()
+            error = self.validate() #NEW
+            if error: #NEW
+                QMessageBox.warning(self, 'Warning', error) #NEW
+                return #NEW
+            self.appointment_data = self.collect_data() #NEW
+            self.confirm_appointment_data()
 
-        if self.form_count == 1:
-           self.save_appointment_data()
+        elif self.form_count == 1:
+            self.save_appointment_data()
+            self.appointment_saved.emit(self.appointment_data) #NEW
+        else: #NEW
+            return #NEW
 
         self.progress_bar.confirm_step()
         self.form_count +=1
@@ -401,6 +437,10 @@ class addAppointment(QMainWindow):
             self.back_btn.setEnabled(False)
             self.back_btn.setToolTip("")
 
+    def closeEvent(self, event): #NEW
+        if self.main_window: #NEW
+            self.main_window.show() #NEW
+        super().closeEvent(event) #NEW
 
     def close_appointment_window(self):
 
@@ -463,6 +503,7 @@ class addAppointment(QMainWindow):
         try:
 
             data_dir = base_dir / "data"
+            data_dir.mkdir(parents=True, exist_ok=True) #NEW
 
             current = QDateTime.currentDateTime()
             timestamp = current.toString("hh-mm-ss_AP")
