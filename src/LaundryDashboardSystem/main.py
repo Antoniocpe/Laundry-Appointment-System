@@ -104,10 +104,30 @@ class MainWindow(QWidget):
         widget.style().polish(widget)
 
     def show_page(self, index, *_):
+
+        if index == 1:
+            self.transaction_page = Transaction()
+            self.stack.removeWidget(self.stack.widget(1))
+            self.stack.insertWidget(1, self.transaction_page)
+
         self.stack.setCurrentIndex(index)
         # keep exactly one page button checked (the clicked one stays checked)
         for i, b in enumerate(self.sidebar_buttons):
             b.setChecked(i == index)
+
+    def closeEvent(self, event):
+        base_dir = Path(__file__).resolve().parent
+        data_dir = base_dir / "data"
+
+        if data_dir.exists() and data_dir.is_dir():
+            for file_path in data_dir.glob("*"):
+                if file_path.is_file():
+                    try:
+                        file_path.unlink()
+                    except Exception as e:
+                        print(f"Failed to delete {file_path.name}: {e}")
+
+        event.accept()
 
 
 if __name__ == "__main__":
@@ -123,6 +143,8 @@ if __name__ == "__main__":
     # Dashboard_style.qss is inside the styles folder
     dashboard_qss = base_dir / "styles" / "Dashboard_style.qss"
 
+    transaction_qss = base_dir / "styles" / "transaction_style.qss"
+
     # 3. Read and apply the stylesheets safely
     style_sheets = []
 
@@ -135,6 +157,11 @@ if __name__ == "__main__":
         style_sheets.append(dashboard_qss.read_text())
     else:
         print(f"Warning: Could not find dashboard style at {dashboard_qss}")
+
+    if dashboard_qss.exists():
+        style_sheets.append(transaction_qss.read_text())
+    else:
+        print(f"Warning: Could not find dashboard style at {transaction_qss}")
 
     # Apply the combined styles to the app
     app.setStyleSheet("\n".join(style_sheets))
