@@ -1,68 +1,103 @@
 import sys
 from pathlib import Path
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QPixmap, QPainter, QPainterPath
+from PyQt6.QtGui import QPixmap, QPainter, QPainterPath, QColor, QPen, QFont
 from PyQt6.QtWidgets import (
     QWidget, QLabel, QVBoxLayout, QHBoxLayout,
     QGridLayout, QFrame, QScrollArea, QFileDialog, QApplication
 )
 
 
-class MemberPictureLabel(QLabel):
-    """Custom picture holder label supporting click-to-upload and automatic rounded cropping."""
-    def __init__(self, default_text="1:1\nPHOTO", parent=None):
+class MemberPhotoLabel(QLabel):
+    """Custom Label rendering circular images with click-to-upload support."""
+    def __init__(self, member_name, image_path=None, parent=None):
         super().__init__(parent)
-        self.default_text = default_text
-        self.setText(default_text)
+        self.member_name = member_name
         self.setFixedSize(90, 90)
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.setToolTip("Click to upload member photo")
-        self.setObjectName("member_picture")
+        self.setToolTip(f"Click to upload photo for {self.member_name}")
+
+        if image_path and Path(image_path).exists():
+            pix = QPixmap(str(image_path))
+            if not pix.isNull():
+                self.setPixmap(self.make_circular(pix, 90, 90))
+            else:
+                self.setPixmap(self.create_placeholder_circle(self.member_name))
+        else:
+            self.setPixmap(self.create_placeholder_circle(self.member_name))
 
     def mousePressEvent(self, event):
         if event.button() == Qt.MouseButton.LeftButton:
             file_path, _ = QFileDialog.getOpenFileName(
-                self, "Select Member Photo", "", "Image Files (*.png *.jpg *.jpeg *.webp *.bmp)"
+                self,
+                f"Select Photo for {self.member_name}",
+                "",
+                "Image Files (*.png *.jpg *.jpeg *.webp *.bmp)"
             )
             if file_path:
-                self.set_photo(file_path)
+                pix = QPixmap(file_path)
+                if not pix.isNull():
+                    self.setPixmap(self.make_circular(pix, 90, 90))
 
-    def set_photo(self, image_path):
-        pixmap = QPixmap(image_path)
-        if not pixmap.isNull():
-            size = self.size()
-            # Aspect ratio scaling & center cropping
-            scaled = pixmap.scaled(
-                size,
-                Qt.AspectRatioMode.KeepAspectRatioByExpanding,
-                Qt.TransformationMode.SmoothTransformation
-            )
-            x = (scaled.width() - size.width()) // 2
-            y = (scaled.height() - size.height()) // 2
-            cropped = scaled.copy(x, y, size.width(), size.height())
+    @staticmethod
+    def make_circular(pixmap, width=90, height=90):
+        scaled = pixmap.scaled(
+            width, height,
+            Qt.AspectRatioMode.KeepAspectRatioByExpanding,
+            Qt.TransformationMode.SmoothTransformation
+        )
+        x = (scaled.width() - width) // 2
+        y = (scaled.height() - height) // 2
+        cropped = scaled.copy(x, y, width, height)
 
-            # Render with rounded corners (12px radius)
-            rounded = QPixmap(size)
-            rounded.fill(Qt.GlobalColor.transparent)
-            painter = QPainter(rounded)
-            painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-            
-            path = QPainterPath()
-            path.addRoundedRect(0, 0, size.width(), size.height(), 12, 12)
-            painter.setClipPath(path)
-            painter.drawPixmap(0, 0, cropped)
-            painter.end()
+        rounded = QPixmap(width, height)
+        rounded.fill(Qt.GlobalColor.transparent)
+        painter = QPainter(rounded)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
 
-            self.setPixmap(rounded)
-            self.setText("")
+        path = QPainterPath()
+        path.addEllipse(0, 0, width, height)
+        painter.setClipPath(path)
+        painter.drawPixmap(0, 0, cropped)
+        painter.end()
+
+        return rounded
+
+    @staticmethod
+    def create_placeholder_circle(name_str):
+        width, height = 90, 90
+        pixmap = QPixmap(width, height)
+        pixmap.fill(Qt.GlobalColor.transparent)
+
+        painter = QPainter(pixmap)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+
+        painter.setPen(QPen(QColor("#2c4d70"), 3))
+        painter.setBrush(QColor("#eef4fb"))
+        painter.drawEllipse(3, 3, width - 6, height - 6)
+
+        painter.setPen(QColor("#2c4d70"))
+        font = QFont("Segoe UI", 11, QFont.Weight.Bold)
+        painter.setFont(font)
+
+        initials = "".join([part[0] for part in name_str.split() if part]).upper()
+        if not initials:
+            initials = "M"
+
+        painter.drawText(0, 0, width, height, Qt.AlignmentFlag.AlignCenter, initials)
+        painter.end()
+
+        return pixmap
 
 
 class About(QWidget):
     def __init__(self):
         super().__init__()
 
-        # Main layout
+        team_images = self.get_team_image_files()
+
+        # Main Layout
         main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(15, 12, 15, 12)
         main_layout.setSpacing(10)
@@ -73,14 +108,26 @@ class About(QWidget):
         self.header.setStyleSheet("font-size: 22px; font-weight: 800; color: #2c4d70; font-family: 'Segoe UI', sans-serif;")
         main_layout.addWidget(self.header)
 
-        # Scroll area for content
+        # Scroll Area Setup (Scrollbars completely hidden)
         self.scroll_area = QScrollArea()
         self.scroll_area.setWidgetResizable(True)
         self.scroll_area.setFrameShape(QFrame.Shape.NoFrame)
         self.scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        self.scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.scroll_area.setStyleSheet("""
+            QScrollArea {
+                border: none;
+                background: transparent;
+            }
+            QScrollBar:vertical, QScrollBar:horizontal {
+                width: 0px;
+                height: 0px;
+                border: none;
+                background: transparent;
+            }
+        """)
 
-        # Scrollable container widget
+        # Content Widget
         self.content = QWidget()
         self.content.setObjectName("about_content")
 
@@ -163,7 +210,7 @@ class About(QWidget):
         team_title = QLabel("Development Team")
         team_title.setStyleSheet("font-size: 15px; font-weight: 800; color: #2c4d70;")
 
-        team_description = QLabel("The people behind the development of this application. (Click photo to upload image)")
+        team_description = QLabel("The people behind the development of this application.")
         team_description.setStyleSheet("font-size: 12px; color: #777777;")
 
         team_card_layout.addWidget(team_title)
@@ -174,11 +221,11 @@ class About(QWidget):
         team_grid.setVerticalSpacing(12)
 
         members = [
-            {"name": "Member 1", "role": "Developer"},
-            {"name": "Member 2", "role": "Developer"},
-            {"name": "Member 3", "role": "Documentation"},
-            {"name": "Member 4", "role": "Documentation"},
-            {"name": "Member 5", "role": "Developer"},
+            {"name": "Member 1", "role": "UI Functionality"},
+            {"name": "Member 2", "role": "Scrum Leader"},
+            {"name": "Member 3", "role": "Quality Assurance"},
+            {"name": "Member 4", "role": "GUI Design, UI Functionality"},
+            {"name": "Member 5", "role": "GUI Design"},
         ]
 
         self.member_cards = []
@@ -199,7 +246,12 @@ class About(QWidget):
             card_layout.setSpacing(4)
             card_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-            picture = MemberPictureLabel("CLICK TO\nADD PHOTO")
+            assigned_img = team_images[index] if index < len(team_images) else None
+
+            picture_label = MemberPhotoLabel(
+                member_name=member["name"],
+                image_path=assigned_img
+            )
 
             name = QLabel(member["name"])
             name.setStyleSheet("font-size: 12px; font-weight: bold; color: #222222;")
@@ -209,14 +261,14 @@ class About(QWidget):
             role.setStyleSheet("font-size: 11px; color: #666666;")
             role.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-            card_layout.addWidget(picture, alignment=Qt.AlignmentFlag.AlignCenter)
+            card_layout.addWidget(picture_label, alignment=Qt.AlignmentFlag.AlignCenter)
             card_layout.addWidget(name)
             card_layout.addWidget(role)
 
             team_grid.addWidget(card, 0, index)
 
             self.member_cards.append({
-                "picture": picture,
+                "picture": picture_label,
                 "name": name,
                 "role": role
             })
@@ -233,10 +285,23 @@ class About(QWidget):
         self.scroll_area.setWidget(self.content)
         main_layout.addWidget(self.scroll_area, stretch=1)
 
-    def set_member_photo(self, index, image_path):
-        """Programmatically load a member photo into the selected card."""
-        if 0 <= index < len(self.member_cards):
-            self.member_cards[index]["picture"].set_photo(image_path)
+    def get_team_image_files(self):
+        current_file = Path(__file__).resolve()
+        possible_dirs = [
+            current_file.parent.parent / "assets" / "team",
+            current_file.parent / "assets" / "team",
+            Path.cwd() / "assets" / "team",
+            Path.cwd() / "src" / "LaundryDashboardSystem" / "assets" / "team",
+        ]
+
+        valid_exts = {".png", ".jpg", ".jpeg", ".webp", ".bmp"}
+        
+        for d in possible_dirs:
+            if d.exists() and d.is_dir():
+                files = sorted([f for f in d.iterdir() if f.is_file() and f.suffix.lower() in valid_exts])
+                if files:
+                    return files
+        return []
 
 
 if __name__ == "__main__":
