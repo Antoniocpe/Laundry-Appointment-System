@@ -63,6 +63,11 @@
     border: 1.5px solid #22588d;
 }
 
+#addappointment_qss QPushButton[tag="schedule_button"]:checked{
+    color: #22588d;
+    border: 1.75px solid #22588d;
+}
+
 #addappointment_qss QRadioButton{
     color: #181818;
     font-size: 14px;
@@ -86,6 +91,32 @@
 }
 
 #addappointment_qss QRadioButton::indicator:unchecked { 
+    background-color:transparent; 
+}
+
+#addappointment_qss QCheckBox{
+    color: #181818;
+    font-size: 14px;
+    spacing: 8px;
+    margin-left: 10px;
+    background: transparent;
+}
+
+#addappointment_qss QCheckBox::indicator { 
+    width: 12px;
+    height: 12px;
+    border-radius: 6px; 
+    border: 1.3px solid #a8a8a8;
+    background-color: #ffffff;
+}
+
+#addappointment_qss QCheckBox::indicator:checked {
+    border-radius: 6px; 
+    border: 1.4px solid #76b7f8;
+    background-color: #deedfb; 
+}
+
+#addappointment_qss QCheckBox::indicator:unchecked { 
     background-color:transparent; 
 }
 
